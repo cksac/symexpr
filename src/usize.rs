@@ -1,6 +1,6 @@
 use crate::{SymValue, define_sym_val, std_bin_op};
 
-define_sym_val!(Usize, UsizeCtx, usize);
+define_sym_val!(Usize, usize);
 
 std_bin_op!(Usize, Add, add, usize);
 std_bin_op!(Usize, Sub, sub, usize);
@@ -9,13 +9,15 @@ std_bin_op!(Usize, Div, div, usize);
 
 #[cfg(test)]
 mod tests {
+    use std::collections::HashMap;
+
     use crate::SymCtx;
 
     use super::*;
 
     #[test]
     fn it_works() {
-        let mut ctx = UsizeCtx::new();
+        let mut ctx = HashMap::new();
         ctx.bind("a", 2);
         let x = Usize::symbol("a");
         let y = Usize::Const(2);

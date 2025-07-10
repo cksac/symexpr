@@ -50,6 +50,9 @@ pub use char::*;
 mod bool;
 pub use bool::*;
 
+mod sym;
+pub use sym::*;
+
 pub mod expr;
 pub mod macros;
 
@@ -57,7 +60,7 @@ pub trait Value: Debug + Clone + 'static {}
 
 pub trait SymValue<Context>: Debug {
     type Value: Value;
-    fn eval(&self, context: &Context) -> Result<Self::Value>;
+    fn eval(&self, ctx: &Context) -> Result<Self::Value>;
     fn cloned(&self) -> Box<dyn SymValue<Context, Value = Self::Value>>;
 }
 
@@ -67,8 +70,8 @@ where
     V: Value,
 {
     type Value = V;
-    fn eval(&self, context: &C) -> Result<Self::Value> {
-        self.as_ref().eval(context)
+    fn eval(&self, ctx: &C) -> Result<Self::Value> {
+        self.as_ref().eval(ctx)
     }
     fn cloned(&self) -> Box<dyn SymValue<C, Value = Self::Value>> {
         self.as_ref().cloned()

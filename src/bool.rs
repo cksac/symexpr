@@ -1,3 +1,3 @@
 use crate::define_sym_val;
 
-define_sym_val!(Bool, BoolCtx, bool);
+define_sym_val!(Bool, bool);

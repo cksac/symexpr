@@ -1,6 +1,6 @@
 use crate::{SymValue, define_sym_val, std_bin_op};
 
-define_sym_val!(U128, U128Ctx, u128);
+define_sym_val!(U128, u128);
 
 std_bin_op!(U128, Add, add, u128);
 std_bin_op!(U128, Sub, sub, u128);
