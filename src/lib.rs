@@ -2,23 +2,53 @@ use std::fmt::Debug;
 
 pub type Symbol = symbol_table::GlobalSymbol;
 
+mod u8;
+pub use u8::*;
+
+mod u16;
+pub use u16::*;
+
+mod u32;
+pub use u32::*;
+
+mod u64;
+pub use u64::*;
+
+mod u128;
+pub use u128::*;
+
 mod usize;
-pub use usize::{Usize, UsizeCtx};
+pub use usize::*;
 
 mod i8;
-pub use i8::{I8, I8Ctx};
+pub use i8::*;
 
 mod i16;
-pub use i16::{I16, I16Ctx};
+pub use i16::*;
 
 mod i32;
-pub use i32::{I32, I32Ctx};
+pub use i32::*;
 
 mod i64;
-pub use i64::{I64, I64Ctx};
+pub use i64::*;
 
 mod i128;
-pub use i128::{I128, I128Ctx};
+pub use i128::*;
+
+mod isize;
+pub use isize::*;
+
+mod f32;
+pub use f32::*;
+
+mod f64;
+pub use f64::*;
+
+mod char;
+pub use char::*;
+
+mod bool;
+pub use bool::*;
 
 pub mod expr;
 pub mod macros;
