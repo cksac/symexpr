@@ -9,17 +9,6 @@ pub trait SymValue<C>: Debug {
     fn eval(&self, ctx: &C) -> Result<Self::Value>;
 }
 
-impl<S, C> SymValue<C> for &S
-where
-    S: SymValue<C> + Clone,
-{
-    type Value = S::Value;
-
-    fn eval(&self, ctx: &C) -> Result<Self::Value> {
-        (**self).eval(ctx)
-    }
-}
-
 pub trait SymCtx<T>: Debug + 'static {
     fn get_symbol(&self, symbol: Symbol) -> Result<T>;
     fn set_symbol(&mut self, symbol: impl AsRef<str>, value: T);
@@ -27,6 +16,7 @@ pub trait SymCtx<T>: Debug + 'static {
 
 pub trait SymExpr<T>: Debug + 'static {
     type Expr<C: SymCtx<T>>: Debug + Clone + Deref<Target = dyn SymValue<C, Value = T>>;
+
     fn lift<C, E>(expr: E) -> Self::Expr<C>
     where
         C: SymCtx<T>,
@@ -41,6 +31,7 @@ where
     T: Value,
 {
     type Expr<C: SymCtx<T>> = Rc<dyn SymValue<C, Value = T>>;
+
     fn lift<C, E>(expr: E) -> Self::Expr<C>
     where
         C: SymCtx<T>,
@@ -58,6 +49,7 @@ where
     T: Value,
 {
     type Expr<C: SymCtx<T>> = Arc<dyn SymValue<C, Value = T>>;
+
     fn lift<C, E>(expr: E) -> Self::Expr<C>
     where
         C: SymCtx<T>,
