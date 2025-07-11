@@ -36,7 +36,7 @@ mod tests {
         assert_eq!(result, 6);
 
         let c = 3;
-        let w = &c + 2 + z + k + 3;
+        let w = &c + 2 + z + k + 3usize;
         let result = w.eval(&ctx).unwrap();
         assert_eq!(result, 16);
 
