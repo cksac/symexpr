@@ -1,6 +1,6 @@
-use std::{collections::HashMap, fmt::Debug, ops::Deref, rc::Rc, sync::Arc};
+use std::{fmt::Debug, ops::Deref, rc::Rc, sync::Arc};
 
-use crate::{Context, Result, SymError, Symbol};
+use crate::{Context, Result, Symbol};
 
 pub trait Value: Debug + Clone + 'static {}
 
@@ -23,22 +23,6 @@ where
 pub trait SymCtx<T>: Debug + 'static {
     fn get_symbol(&self, symbol: Symbol) -> Result<T>;
     fn set_symbol(&mut self, symbol: impl AsRef<str>, value: T);
-}
-
-impl<T> SymCtx<T> for HashMap<Symbol, T>
-where
-    T: Value,
-{
-    fn get_symbol(&self, symbol: Symbol) -> Result<T> {
-        self.get(&symbol)
-            .cloned()
-            .ok_or(SymError::undefined_symbol::<T>(symbol))
-    }
-
-    fn set_symbol(&mut self, symbol: impl AsRef<str>, value: T) {
-        let symbol = Symbol::new(symbol);
-        self.insert(symbol, value);
-    }
 }
 
 pub trait SymExpr<T>: Debug + 'static {

@@ -1,6 +1,22 @@
 use std::collections::HashMap;
 
-use crate::{Result, SymCtx, Symbol};
+use crate::{Result, SymCtx, SymError, Symbol, Value};
+
+impl<T> SymCtx<T> for HashMap<Symbol, T>
+where
+    T: Value,
+{
+    fn get_symbol(&self, symbol: Symbol) -> Result<T> {
+        self.get(&symbol)
+            .cloned()
+            .ok_or(SymError::undefined_symbol::<T>(symbol))
+    }
+
+    fn set_symbol(&mut self, symbol: impl AsRef<str>, value: T) {
+        let symbol = Symbol::new(symbol);
+        self.insert(symbol, value);
+    }
+}
 
 #[derive(Debug, Default)]
 pub struct Context {
