@@ -6,6 +6,7 @@ edition = "2024"
 readme = "README.md"
 license = "MIT OR Apache-2.0"
 categories = ["science"]
+description = "A libray to build symbolic expression and evaluation."
 
 [dependencies]
 symbol_table = { version = "0.4.0", features = ["global"] }
