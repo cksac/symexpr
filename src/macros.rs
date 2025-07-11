@@ -10,7 +10,8 @@ macro_rules! impl_sym_val {
             }
         }
 
-        pub type $Alias<C, E = $crate::RcExpr> = $crate::Sym<$Val, C, E>;
+        #[allow(dead_code)]
+        pub type $Alias<C = $crate::Context, E = $crate::RcExpr> = $crate::Sym<$Val, C, E>;
     };
 }
 
@@ -28,7 +29,8 @@ macro_rules! impl_val_bin_ops {
             type Output = $crate::Sym<OUT, C, E>;
 
             fn $Fn(self, rhs: $crate::Sym<RHS, C, E>) -> Self::Output {
-                $crate::Sym::Expr(E::wrap($crate::ops::$Op::new(self, rhs)))
+                let lhs = $crate::Sym::<$LHS, C, E>::constant(self);
+                $crate::Sym::Expr(E::lift($crate::ops::$Op::new(lhs, rhs)))
             }
         }
 
@@ -43,7 +45,8 @@ macro_rules! impl_val_bin_ops {
             type Output = $crate::Sym<OUT, C, E>;
 
             fn $Fn(self, rhs: &$crate::Sym<RHS, C, E>) -> Self::Output {
-                $crate::Sym::Expr(E::wrap($crate::ops::$Op::new(self, rhs.clone())))
+                let lhs = $crate::Sym::<$LHS, C, E>::constant(self);
+                $crate::Sym::Expr(E::lift($crate::ops::$Op::new(lhs, rhs.clone())))
             }
         }
 
@@ -58,7 +61,8 @@ macro_rules! impl_val_bin_ops {
             type Output = $crate::Sym<OUT, C, E>;
 
             fn $Fn(self, rhs: $crate::Sym<RHS, C, E>) -> Self::Output {
-                $crate::Sym::Expr(E::wrap($crate::ops::$Op::new(*self, rhs)))
+                let lhs = $crate::Sym::<$LHS, C, E>::constant(*self);
+                $crate::Sym::Expr(E::lift($crate::ops::$Op::new(lhs, rhs)))
             }
         }
 
@@ -73,7 +77,8 @@ macro_rules! impl_val_bin_ops {
             type Output = $crate::Sym<OUT, C, E>;
 
             fn $Fn(self, rhs: &$crate::Sym<RHS, C, E>) -> Self::Output {
-                $crate::Sym::Expr(E::wrap($crate::ops::$Op::new(*self, rhs.clone())))
+                let lhs = $crate::Sym::<$LHS, C, E>::constant(*self);
+                $crate::Sym::Expr(E::lift($crate::ops::$Op::new(lhs, rhs.clone())))
             }
         }
     };

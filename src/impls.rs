@@ -1,48 +1,49 @@
+#![allow(unused)]
 
-mod u8;
-pub use u8::*;
+mod symu8;
+pub use symu8::SymU8;
 
-mod u16;
-pub use u16::*;
+mod symu16;
+pub use symu16::SymU16;
 
-mod u32;
-pub use u32::*;
+mod symu32;
+pub use symu32::SymU32;
 
-mod u64;
-pub use u64::*;
+mod symu64;
+pub use symu64::SymU64;
 
-mod u128;
-pub use u128::*;
+mod symu128;
+pub use symu128::SymU128;
 
-mod usize;
-pub use usize::*;
+mod symusize;
+pub use symusize::SymUsize;
 
-mod i8;
-pub use i8::*;
+mod symi8;
+pub use symi8::SymI8;
 
-mod i16;
-pub use i16::*;
+mod symi16;
+pub use symi16::SymI16;
 
-mod i32;
-pub use i32::*;
+mod symi32;
+pub use symi32::SymI32;
 
-mod i64;
-pub use i64::*;
+mod symi64;
+pub use symi64::SymI64;
 
-mod i128;
-pub use i128::*;
+mod symi128;
+pub use symi128::SymI128;
 
-mod isize;
-pub use isize::*;
+mod symisize;
+pub use symisize::SymIsize;
 
-mod f32;
-pub use f32::*;
+mod symf32;
+pub use symf32::SymF32;
 
-mod f64;
-pub use f64::*;
+mod symf64;
+pub use symf64::SymF64;
 
-mod char;
-pub use char::*;
+mod symchar;
+pub use symchar::SymChar;
 
-mod bool;
-pub use bool::*;
+mod symbool;
+pub use symbool::SymBool;

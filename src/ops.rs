@@ -9,3 +9,6 @@ pub use mul::Mul;
 
 mod div;
 pub use div::Div;
+
+mod eq;
+pub use eq::{Eq, SymEq};

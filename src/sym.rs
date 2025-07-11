@@ -1,6 +1,6 @@
 use std::{collections::HashMap, fmt::Debug, ops::Deref, rc::Rc, sync::Arc};
 
-use crate::{Result, SymError, Symbol};
+use crate::{Context, Result, SymError, Symbol};
 
 pub trait Value: Debug + Clone + 'static {}
 
@@ -9,32 +9,41 @@ pub trait SymValue<C>: Debug {
     fn eval(&self, ctx: &C) -> Result<Self::Value>;
 }
 
+impl<S, C> SymValue<C> for &S
+where
+    S: SymValue<C> + Clone,
+{
+    type Value = S::Value;
+
+    fn eval(&self, ctx: &C) -> Result<Self::Value> {
+        (**self).eval(ctx)
+    }
+}
+
 pub trait SymCtx<T>: Debug + 'static {
-    fn get(&self, symbol: Symbol) -> Result<T>;
-    fn bind(&mut self, symbol: impl AsRef<str>, value: T);
+    fn get_symbol(&self, symbol: Symbol) -> Result<T>;
+    fn set_symbol(&mut self, symbol: impl AsRef<str>, value: T);
 }
 
 impl<T> SymCtx<T> for HashMap<Symbol, T>
 where
     T: Value,
 {
-    fn get(&self, symbol: Symbol) -> Result<T> {
+    fn get_symbol(&self, symbol: Symbol) -> Result<T> {
         self.get(&symbol)
             .cloned()
             .ok_or_else(|| SymError::SymbolNotFound(symbol))
     }
 
-    fn bind(&mut self, symbol: impl AsRef<str>, value: T) {
+    fn set_symbol(&mut self, symbol: impl AsRef<str>, value: T) {
         let symbol = Symbol::new(symbol);
         self.insert(symbol, value);
     }
 }
 
-pub type Context<T> = HashMap<Symbol, T>;
-
 pub trait SymExpr<T>: Debug + 'static {
     type Expr<C: SymCtx<T>>: Debug + Clone + Deref<Target = dyn SymValue<C, Value = T>>;
-    fn wrap<C, E>(expr: E) -> Self::Expr<C>
+    fn lift<C, E>(expr: E) -> Self::Expr<C>
     where
         C: SymCtx<T>,
         E: SymValue<C, Value = T> + 'static;
@@ -48,7 +57,7 @@ where
     T: Value,
 {
     type Expr<C: SymCtx<T>> = Rc<dyn SymValue<C, Value = T>>;
-    fn wrap<C, E>(expr: E) -> Self::Expr<C>
+    fn lift<C, E>(expr: E) -> Self::Expr<C>
     where
         C: SymCtx<T>,
         E: SymValue<C, Value = T> + 'static,
@@ -65,7 +74,7 @@ where
     T: Value,
 {
     type Expr<C: SymCtx<T>> = Arc<dyn SymValue<C, Value = T>>;
-    fn wrap<C, E>(expr: E) -> Self::Expr<C>
+    fn lift<C, E>(expr: E) -> Self::Expr<C>
     where
         C: SymCtx<T>,
         E: SymValue<C, Value = T> + 'static,
@@ -75,7 +84,7 @@ where
 }
 
 #[derive(Debug)]
-pub enum Sym<T, C, E = RcExpr>
+pub enum Sym<T, C = Context, E = RcExpr>
 where
     T: Value,
     C: SymCtx<T>,
@@ -111,7 +120,7 @@ where
         Self::Symbol(Symbol::new(name))
     }
 
-    pub fn value(value: T) -> Self {
+    pub fn constant(value: T) -> Self {
         Self::Const(value)
     }
 }
@@ -126,9 +135,9 @@ where
 
     fn eval(&self, ctx: &C) -> Result<Self::Value> {
         match self {
-            Self::Symbol(s) => ctx.get(*s),
-            Self::Const(v) => Ok(v.clone()),
-            Self::Expr(e) => e.eval(ctx),
+            Sym::Symbol(s) => ctx.get_symbol(*s),
+            Sym::Const(v) => Ok(v.clone()),
+            Sym::Expr(e) => e.eval(ctx),
         }
     }
 }
