@@ -1,6 +1,6 @@
-use std::{fmt::Debug, marker::PhantomData};
+use std::marker::PhantomData;
 
-use crate::{Result, SymCtx, SymValue, Value};
+use crate::{Result, Sym, SymCtx, SymExpr, SymValue, Value};
 
 #[derive(Debug)]
 pub struct Sub<C, L, R>
@@ -27,22 +27,65 @@ where
     }
 }
 
-impl<C, L, R> SymValue<C> for Sub<C, L, R>
+impl<C, L, R> Clone for Sub<C, L, R>
 where
-    C: SymCtx<L::Value> + SymCtx<R::Value>,
-    L: SymValue<C>,
-    R: SymValue<C>,
-    L::Value: std::ops::Sub<R::Value>,
-    <L::Value as std::ops::Sub<R::Value>>::Output: Value,
+    L: SymValue<C> + Clone,
+    R: SymValue<C> + Clone,
 {
-    type Value = <L::Value as std::ops::Sub<R::Value>>::Output;
+    fn clone(&self) -> Self {
+        Self {
+            lhs: self.lhs.clone(),
+            rhs: self.rhs.clone(),
+            ctx: PhantomData,
+        }
+    }
+}
+
+impl<C, L, R, LHS, RHS, OUT> SymValue<C> for Sub<C, L, R>
+where
+    C: SymCtx<LHS> + SymCtx<RHS> + SymCtx<OUT>,
+    L: SymValue<C, Value = LHS>,
+    R: SymValue<C, Value = RHS>,
+    OUT: Value,
+    LHS: std::ops::Sub<RHS, Output = OUT>,
+{
+    type Value = OUT;
+
     fn eval(&self, ctx: &C) -> Result<Self::Value> {
         let lhs = self.lhs.eval(ctx)?;
         let rhs = self.rhs.eval(ctx)?;
         Ok(lhs - rhs)
     }
+}
 
-    fn clone_box(&self) -> Box<dyn SymValue<C, Value = Self::Value>> {
-        Box::new(Sub::new(self.lhs.clone_box(), self.rhs.clone_box()))
+impl<C, E, R, LHS, RHS, OUT> std::ops::Sub<R> for Sym<LHS, C, E>
+where
+    C: SymCtx<LHS> + SymCtx<RHS> + SymCtx<OUT>,
+    E: SymExpr<LHS> + SymExpr<OUT>,
+    R: SymValue<C, Value = RHS> + 'static,
+    LHS: Value + std::ops::Sub<RHS, Output = OUT>,
+    RHS: Value,
+    OUT: Value,
+{
+    type Output = Sym<OUT, C, E>;
+
+    fn sub(self, rhs: R) -> Self::Output {
+        Sym::Expr(E::wrap(Sub::new(self, rhs)))
+    }
+}
+
+impl<C, E, R, LHS, RHS, OUT> std::ops::Sub<R> for &Sym<LHS, C, E>
+where
+    C: SymCtx<LHS> + SymCtx<RHS> + SymCtx<OUT>,
+    E: SymExpr<LHS> + SymExpr<OUT>,
+    R: SymValue<C, Value = RHS> + 'static,
+    LHS: Value + std::ops::Sub<RHS, Output = OUT>,
+    RHS: Value,
+    OUT: Value,
+{
+    type Output = Sym<OUT, C, E>;
+
+    fn sub(self, rhs: R) -> Self::Output {
+        Sym::Expr(E::wrap(Sub::new(self.clone(), rhs)))
     }
 }

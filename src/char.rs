@@ -1,3 +1,3 @@
-use crate::define_sym_val;
+use crate::impl_sym_val;
 
-define_sym_val!(Char, char);
+impl_sym_val!(char, SymChar);

@@ -1,8 +1,8 @@
-use crate::{SymValue, define_sym_val, std_bin_op};
+use crate::{impl_sym_val, impl_val_bin_ops};
 
-define_sym_val!(F64, f64);
+impl_sym_val!(f64, SymF64);
 
-std_bin_op!(F64, Add, add, f64);
-std_bin_op!(F64, Sub, sub, f64);
-std_bin_op!(F64, Mul, mul, f64);
-std_bin_op!(F64, Div, div, f64);
+impl_val_bin_ops!(f64, Add, add);
+impl_val_bin_ops!(f64, Sub, sub);
+impl_val_bin_ops!(f64, Mul, mul);
+impl_val_bin_ops!(f64, Div, div);

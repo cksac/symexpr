@@ -1,29 +1,8 @@
-use crate::{SymValue, define_sym_val, std_bin_op};
+use crate::{impl_sym_val, impl_val_bin_ops};
 
-define_sym_val!(Isize, isize);
+impl_sym_val!(isize, SymIsize);
 
-std_bin_op!(Isize, Add, add, isize);
-std_bin_op!(Isize, Sub, sub, isize);
-std_bin_op!(Isize, Mul, mul, isize);
-std_bin_op!(Isize, Div, div, isize);
-
-#[cfg(test)]
-mod tests {
-    use std::collections::HashMap;
-
-    use crate::SymCtx;
-
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let mut ctx = HashMap::new();
-        ctx.bind("a", 2);
-        let x = Isize::symbol("a");
-        let y = Isize::Const(2);
-        let z = (2 + x + y) / 3isize;
-        println!("{:?}", z);
-        let result = z.eval(&ctx).unwrap();
-        assert_eq!(result, 2);
-    }
-}
+impl_val_bin_ops!(isize, Add, add);
+impl_val_bin_ops!(isize, Sub, sub);
+impl_val_bin_ops!(isize, Mul, mul);
+impl_val_bin_ops!(isize, Div, div);
