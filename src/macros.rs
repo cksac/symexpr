@@ -19,7 +19,7 @@ macro_rules! std_bin_op {
         {
             type Output = $crate::$Sym<C>;
             fn $Fn(self, rhs: R) -> Self::Output {
-                $crate::$Sym::Expr(Box::new($crate::expr::$Op::new(self.cloned(), rhs)))
+                $crate::$Sym::Expr(Box::new($crate::expr::$Op::new(self.clone_box(), rhs)))
             }
         }
 
@@ -39,7 +39,7 @@ macro_rules! std_bin_op {
         {
             type Output = $crate::$Sym<C>;
             fn $Fn(self, rhs: &$crate::$Sym<C>) -> Self::Output {
-                $crate::$Sym::Expr(Box::new($crate::expr::$Op::new(self, rhs.cloned())))
+                $crate::$Sym::Expr(Box::new($crate::expr::$Op::new(self, rhs.clone_box())))
             }
         }
 
@@ -59,7 +59,7 @@ macro_rules! std_bin_op {
         {
             type Output = $crate::$Sym<C>;
             fn $Fn(self, rhs: &$crate::$Sym<C>) -> Self::Output {
-                $crate::$Sym::Expr(Box::new($crate::expr::$Op::new(*self, rhs.cloned())))
+                $crate::$Sym::Expr(Box::new($crate::expr::$Op::new(*self, rhs.clone_box())))
             }
         }
     };
@@ -78,7 +78,7 @@ macro_rules! define_sym_val {
                 Ok(*self)
             }
 
-            fn cloned(&self) -> Box<dyn $crate::SymValue<C, Value = Self::Value>> {
+            fn clone_box(&self) -> Box<dyn $crate::SymValue<C, Value = Self::Value>> {
                 Box::new(*self)
             }
         }

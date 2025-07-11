@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, rc::Rc};
 
 use crate::{Result, SymCtx, SymError, SymValue, Symbol, Value};
 
@@ -28,11 +28,11 @@ where
         }
     }
 
-    fn cloned(&self) -> Box<dyn SymValue<C, Value = Self::Value>> {
+    fn clone_box(&self) -> Box<dyn SymValue<C, Value = Self::Value>> {
         match self {
             Self::Const(v) => Box::new(Self::Const(v.clone())),
             Self::Symbol(s) => Box::new(Self::Symbol(*s)),
-            Self::Expr(e) => e.cloned(),
+            Self::Expr(e) => e.clone_box(),
         }
     }
 }
@@ -44,20 +44,5 @@ where
 {
     pub fn symbol(name: impl AsRef<str>) -> Self {
         Self::Symbol(Symbol::new(name))
-    }
-}
-
-impl<T> SymCtx<T> for HashMap<Symbol, T>
-where
-    T: Value,
-{
-    fn get(&self, symbol: Symbol) -> Result<T> {
-        self.get(&symbol)
-            .cloned()
-            .ok_or(SymError::SymbolNotFound(symbol))
-    }
-
-    fn bind(&mut self, symbol: impl AsRef<str>, value: T) {
-        self.insert(Symbol::new(symbol), value);
     }
 }

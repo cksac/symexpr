@@ -42,7 +42,7 @@ where
         Ok(lhs * rhs)
     }
 
-    fn cloned(&self) -> Box<dyn SymValue<C, Value = Self::Value>> {
-        Box::new(Mul::new(self.lhs.cloned(), self.rhs.cloned()))
+    fn clone_box(&self) -> Box<dyn SymValue<C, Value = Self::Value>> {
+        Box::new(Mul::new(self.lhs.clone_box(), self.rhs.clone_box()))
     }
 }
