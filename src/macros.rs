@@ -66,11 +66,9 @@ macro_rules! std_bin_op {
 }
 
 #[macro_export]
-macro_rules! define_sym_val {
-    ($Sym:ident, $Val:ident) => {
+macro_rules! impl_sym_val {
+    ($Val:ident) => {
         impl $crate::Value for $Val {}
-
-        pub type $Sym<C> = $crate::Sym<$Val, C>;
 
         impl<C> $crate::SymValue<C> for $Val {
             type Value = $Val;

@@ -1,29 +1,41 @@
-use crate::{SymValue, define_sym_val, std_bin_op};
+use crate::{Context, RcExpr, Sym, Value};
 
-define_sym_val!(Usize, usize);
+impl Value for usize {}
 
-std_bin_op!(Usize, Add, add, usize);
-std_bin_op!(Usize, Sub, sub, usize);
-std_bin_op!(Usize, Mul, mul, usize);
-std_bin_op!(Usize, Div, div, usize);
+pub type SymUsize<C, E = RcExpr> = Sym<usize, C, E>;
 
 #[cfg(test)]
 mod tests {
-    use std::collections::HashMap;
-
-    use crate::SymCtx;
+    use crate::{SymCtx, SymValue};
 
     use super::*;
 
+    type Ctx = Context<usize>;
+    type Usize = SymUsize<Ctx>;
+
     #[test]
     fn it_works() {
-        let mut ctx = HashMap::new();
-        ctx.bind("a", 2);
         let x = Usize::symbol("a");
-        let y = Usize::Const(2);
-        let z = (2 + x + y) / 3usize;
-        println!("{:?}", z);
-        let result = z.eval(&ctx).unwrap();
+        let y = Usize::value(4usize);
+        let k = Usize::value(2usize);
+
+        let mut ctx = Ctx::new();
+        ctx.bind("a", 2);
+
+        let result = x.eval(&ctx).unwrap();
         assert_eq!(result, 2);
+
+        let result = y.eval(&ctx).unwrap();
+        assert_eq!(result, 4);
+
+        let z = x + y;
+        let result = z.eval(&ctx).unwrap();
+        assert_eq!(result, 6);
+
+        let w = z + k;
+        let result = w.eval(&ctx).unwrap();
+        assert_eq!(result, 8);
+
+        println!("{:?}", w);
     }
 }

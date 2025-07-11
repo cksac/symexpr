@@ -3,62 +3,57 @@ pub type Symbol = symbol_table::GlobalSymbol;
 mod error;
 pub use error::{Result, SymError};
 
-pub mod value;
-pub use value::{SymValue, Value};
-
-mod context;
-pub use context::SymCtx;
-
-pub mod expr;
-pub mod macros;
-
 mod sym;
 pub use sym::*;
 
-mod u8;
-pub use u8::*;
+pub mod ops;
 
-mod u16;
-pub use u16::*;
+// mod macros;
 
-mod u32;
-pub use u32::*;
+// mod u8;
+// pub use u8::*;
 
-mod u64;
-pub use u64::*;
+// mod u16;
+// pub use u16::*;
 
-mod u128;
-pub use u128::*;
+// mod u32;
+// pub use u32::*;
+
+// mod u64;
+// pub use u64::*;
+
+// mod u128;
+// pub use u128::*;
 
 mod usize;
 pub use usize::*;
 
-mod i8;
-pub use i8::*;
+// mod i8;
+// pub use i8::*;
 
-mod i16;
-pub use i16::*;
+// mod i16;
+// pub use i16::*;
 
-mod i32;
-pub use i32::*;
+// mod i32;
+// pub use i32::*;
 
-mod i64;
-pub use i64::*;
+// mod i64;
+// pub use i64::*;
 
-mod i128;
-pub use i128::*;
+// mod i128;
+// pub use i128::*;
 
-mod isize;
-pub use isize::*;
+// mod isize;
+// pub use isize::*;
 
-mod f32;
-pub use f32::*;
+// mod f32;
+// pub use f32::*;
 
-mod f64;
-pub use f64::*;
+// mod f64;
+// pub use f64::*;
 
-mod char;
-pub use char::*;
+// mod char;
+// pub use char::*;
 
-mod bool;
-pub use bool::*;
+// mod bool;
+// pub use bool::*;
