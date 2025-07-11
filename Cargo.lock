@@ -49,7 +49,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "symval"
+name = "symexpr"
 version = "0.1.0"
 dependencies = [
  "symbol_table",

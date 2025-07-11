@@ -1,21 +1,21 @@
 # SYMVAL
 
-![Rust](https://github.com/cksac/symval/workflows/Rust/badge.svg)
-[![Docs Status](https://docs.rs/symval/badge.svg)](https://docs.rs/symval)
-[![Latest Version](https://img.shields.io/crates/v/symval.svg)](https://crates.io/crates/symval)
+![Rust](https://github.com/cksac/symexpr/workflows/Rust/badge.svg)
+[![Docs Status](https://docs.rs/symexpr/badge.svg)](https://docs.rs/symexpr)
+[![Latest Version](https://img.shields.io/crates/v/symexpr.svg)](https://crates.io/crates/symexpr)
 
-`symval` is a Rust libray to build symbolic expression and evaluation.
+`symexpr` is a Rust libray to build symbolic expression and evaluation.
 ---
 
 ## Installation
 ```sh
-cargo add symval
+cargo add symexpr
 ```
 
 ## Usage
 ```rust
-use symval::ops::{SymEq, SymGe};
-use symval::{Context, SymCtx, SymValue, SymUsize};
+use symexpr::ops::{SymEq, SymGe};
+use symexpr::{Context, SymCtx, SymValue, SymUsize};
 
 type Usize = SymUsize;
 

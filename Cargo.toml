@@ -1,6 +1,6 @@
 [package]
 authors = ["cksac <cs.cksac@gmail.com>"]
-name = "symval"
+name = "symexpr"
 version = "0.1.0"
 edition = "2024"
 readme = "README.md"
