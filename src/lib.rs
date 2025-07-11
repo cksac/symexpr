@@ -14,12 +14,12 @@ pub mod ops;
 mod macros;
 
 mod impls;
+pub use impls::*;
 
 #[cfg(test)]
 mod tests {
-    use crate::impls::SymUsize;
     use crate::ops::{SymEq, SymGe};
-    use crate::{Context, SymCtx, SymValue};
+    use crate::{Context, SymCtx, SymUsize, SymValue};
 
     type Usize = SymUsize;
 
@@ -51,7 +51,7 @@ mod tests {
         assert_eq!(result, 6);
 
         let c = 3;
-        let w = &c + z + 2 + k + 3;
+        let w = c + z + 2 + k + 3;
         let result = w.eval(&ctx).unwrap();
         assert_eq!(result, 16);
 

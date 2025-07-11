@@ -1,7 +1,11 @@
 [package]
+authors = ["cksac <cs.cksac@gmail.com>"]
 name = "symval"
 version = "0.1.0"
 edition = "2024"
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+categories = ["science"]
 
 [dependencies]
 symbol_table = { version = "0.4.0", features = ["global"] }
