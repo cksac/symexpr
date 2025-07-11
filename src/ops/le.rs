@@ -45,7 +45,7 @@ where
     fn eval(&self, ctx: &C) -> Result<Self::Value> {
         let lhs = self.lhs.eval(ctx)?;
         let rhs = self.rhs.eval(ctx)?;
-        Ok(lhs < rhs)
+        Ok(lhs <= rhs)
     }
 }
 
