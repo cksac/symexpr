@@ -19,8 +19,7 @@ use symval::{Context, SymCtx, SymValue, SymUsize};
 
 type Usize = SymUsize;
 
-#[test]
-fn it_works() {
+fn main() {
     let x = &Usize::symbol("a");
     let y = &Usize::constant(4);
     let k = &Usize::constant(2);
@@ -36,11 +35,11 @@ fn it_works() {
 
     let b = x.eq(y);
     let result = b.eval(&ctx).unwrap();
-    assert_eq!(result, false);
+    assert!(!result);
 
     let b = x.ge(y);
     let result = b.eval(&ctx).unwrap();
-    assert_eq!(result, false);
+    assert!(!result);
 
     let z = x + y;
     let result = z.eval(&ctx).unwrap();
@@ -51,6 +50,6 @@ fn it_works() {
     let result = w.eval(&ctx).unwrap();
     assert_eq!(result, 16);
 
-    println!("{:?}", w);
+println!("{:?}", w);
 }
 ```

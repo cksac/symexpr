@@ -40,11 +40,11 @@ mod tests {
 
         let b = x.eq(y);
         let result = b.eval(&ctx).unwrap();
-        assert_eq!(result, false);
+        assert!(!result);
 
         let b = x.ge(y);
         let result = b.eval(&ctx).unwrap();
-        assert_eq!(result, false);
+        assert!(!result);
 
         let z = x + y;
         let result = z.eval(&ctx).unwrap();
@@ -54,7 +54,5 @@ mod tests {
         let w = c + z + 2 + k + 3;
         let result = w.eval(&ctx).unwrap();
         assert_eq!(result, 16);
-
-        println!("{:?}", w);
     }
 }
