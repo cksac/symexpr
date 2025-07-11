@@ -49,7 +49,5 @@ fn main() {
     let w = c + z + 2 + k + 3;
     let result = w.eval(&ctx).unwrap();
     assert_eq!(result, 16);
-
-println!("{:?}", w);
 }
 ```
