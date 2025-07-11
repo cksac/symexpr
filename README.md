@@ -1,4 +1,4 @@
-# SYMVAL
+# SYMEXPR
 
 ![Rust](https://github.com/cksac/symexpr/workflows/Rust/badge.svg)
 [![Docs Status](https://docs.rs/symexpr/badge.svg)](https://docs.rs/symexpr)
