@@ -4,10 +4,9 @@ use crate::{Result, SymError, Symbol};
 
 pub trait Value: Debug + Clone + 'static {}
 
-pub trait SymValue: Debug {
+pub trait SymValue<C>: Debug {
     type Value: Value;
-    type Context: SymCtx<Self::Value>;
-    fn eval(&self, ctx: &Self::Context) -> Result<Self::Value>;
+    fn eval(&self, ctx: &C) -> Result<Self::Value>;
 }
 
 pub trait SymCtx<T>: Debug + 'static {
@@ -34,11 +33,11 @@ where
 pub type Context<T> = HashMap<Symbol, T>;
 
 pub trait SymExpr<T>: Debug + 'static {
-    type Expr<C: SymCtx<T>>: Debug + Clone + Deref<Target = dyn SymValue<Value = T, Context = C>>;
+    type Expr<C: SymCtx<T>>: Debug + Clone + Deref<Target = dyn SymValue<C, Value = T>>;
     fn wrap<C, E>(expr: E) -> Self::Expr<C>
     where
         C: SymCtx<T>,
-        E: SymValue<Value = T, Context = C> + 'static;
+        E: SymValue<C, Value = T> + 'static;
 }
 
 #[derive(Debug, Clone)]
@@ -48,11 +47,11 @@ impl<T> SymExpr<T> for RcExpr
 where
     T: Value,
 {
-    type Expr<C: SymCtx<T>> = Rc<dyn SymValue<Value = T, Context = C>>;
+    type Expr<C: SymCtx<T>> = Rc<dyn SymValue<C, Value = T>>;
     fn wrap<C, E>(expr: E) -> Self::Expr<C>
     where
         C: SymCtx<T>,
-        E: SymValue<Value = T, Context = C> + 'static,
+        E: SymValue<C, Value = T> + 'static,
     {
         Rc::new(expr)
     }
@@ -65,11 +64,11 @@ impl<T> SymExpr<T> for ArcExpr
 where
     T: Value,
 {
-    type Expr<C: SymCtx<T>> = Arc<dyn SymValue<Value = T, Context = C>>;
+    type Expr<C: SymCtx<T>> = Arc<dyn SymValue<C, Value = T>>;
     fn wrap<C, E>(expr: E) -> Self::Expr<C>
     where
         C: SymCtx<T>,
-        E: SymValue<Value = T, Context = C> + 'static,
+        E: SymValue<C, Value = T> + 'static,
     {
         Arc::new(expr)
     }
@@ -87,21 +86,6 @@ where
     Expr(E::Expr<C>),
 }
 
-impl<T, C, E> Sym<T, C, E>
-where
-    T: Value,
-    C: SymCtx<T>,
-    E: SymExpr<T>,
-{
-    pub fn symbol(name: impl AsRef<str>) -> Self {
-        Self::Symbol(Symbol::new(name))
-    }
-
-    pub fn value(value: impl Into<T>) -> Self {
-        Self::Const(value.into())
-    }
-}
-
 impl<T, C, E> Clone for Sym<T, C, E>
 where
     T: Value,
@@ -117,16 +101,30 @@ where
     }
 }
 
-impl<T, C, E> SymValue for Sym<T, C, E>
+impl<T, C, E> Sym<T, C, E>
+where
+    T: Value,
+    C: SymCtx<T>,
+    E: SymExpr<T>,
+{
+    pub fn symbol(name: impl AsRef<str>) -> Self {
+        Self::Symbol(Symbol::new(name))
+    }
+
+    pub fn value(value: T) -> Self {
+        Self::Const(value)
+    }
+}
+
+impl<T, C, E> SymValue<C> for Sym<T, C, E>
 where
     T: Value,
     C: SymCtx<T>,
     E: SymExpr<T>,
 {
     type Value = T;
-    type Context = C;
 
-    fn eval(&self, ctx: &Self::Context) -> Result<Self::Value> {
+    fn eval(&self, ctx: &C) -> Result<Self::Value> {
         match self {
             Self::Symbol(s) => ctx.get(*s),
             Self::Const(v) => Ok(v.clone()),

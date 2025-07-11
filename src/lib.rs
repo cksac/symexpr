@@ -8,7 +8,7 @@ pub use sym::*;
 
 pub mod ops;
 
-// mod macros;
+mod macros;
 
 // mod u8;
 // pub use u8::*;

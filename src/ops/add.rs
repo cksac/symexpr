@@ -5,18 +5,32 @@ use crate::{Result, Sym, SymCtx, SymExpr, SymValue, Value};
 #[derive(Debug)]
 pub struct Add<C, L, R>
 where
-    L: SymValue,
-    R: SymValue,
+    L: SymValue<C>,
+    R: SymValue<C>,
 {
     lhs: L,
     rhs: R,
     ctx: PhantomData<fn(&C)>,
 }
 
+impl<C, L, R> Add<C, L, R>
+where
+    L: SymValue<C>,
+    R: SymValue<C>,
+{
+    pub fn new(lhs: L, rhs: R) -> Self {
+        Self {
+            lhs,
+            rhs,
+            ctx: PhantomData,
+        }
+    }
+}
+
 impl<C, L, R> Clone for Add<C, L, R>
 where
-    L: SymValue + Clone,
-    R: SymValue + Clone,
+    L: SymValue<C> + Clone,
+    R: SymValue<C> + Clone,
 {
     fn clone(&self) -> Self {
         Self {
@@ -27,19 +41,17 @@ where
     }
 }
 
-impl<C, L, R, LHS, RHS, OUT> SymValue for Add<C, L, R>
+impl<C, L, R, LHS, RHS, OUT> SymValue<C> for Add<C, L, R>
 where
     C: SymCtx<LHS> + SymCtx<RHS> + SymCtx<OUT>,
-    L: SymValue<Value = LHS, Context = C>,
-    R: SymValue<Value = RHS, Context = C>,
+    L: SymValue<C, Value = LHS>,
+    R: SymValue<C, Value = RHS>,
     OUT: Value,
     LHS: std::ops::Add<RHS, Output = OUT>,
 {
     type Value = OUT;
 
-    type Context = C;
-
-    fn eval(&self, ctx: &Self::Context) -> Result<Self::Value> {
+    fn eval(&self, ctx: &C) -> Result<Self::Value> {
         let lhs = self.lhs.eval(ctx)?;
         let rhs = self.rhs.eval(ctx)?;
         Ok(lhs + rhs)
@@ -50,7 +62,7 @@ impl<C, E, R, LHS, RHS, OUT> std::ops::Add<R> for Sym<LHS, C, E>
 where
     C: SymCtx<LHS> + SymCtx<RHS> + SymCtx<OUT>,
     E: SymExpr<LHS> + SymExpr<OUT>,
-    R: SymValue<Value = RHS, Context = C> + 'static,
+    R: SymValue<C, Value = RHS> + 'static,
     LHS: Value + std::ops::Add<RHS, Output = OUT>,
     RHS: Value,
     OUT: Value,
@@ -58,11 +70,7 @@ where
     type Output = Sym<OUT, C, E>;
 
     fn add(self, rhs: R) -> Self::Output {
-        Sym::Expr(E::wrap(Add {
-            lhs: self,
-            rhs,
-            ctx: PhantomData,
-        }))
+        Sym::Expr(E::wrap(Add::new(self, rhs)))
     }
 }
 
@@ -70,7 +78,7 @@ impl<C, E, R, LHS, RHS, OUT> std::ops::Add<R> for &Sym<LHS, C, E>
 where
     C: SymCtx<LHS> + SymCtx<RHS> + SymCtx<OUT>,
     E: SymExpr<LHS> + SymExpr<OUT>,
-    R: SymValue<Value = RHS, Context = C> + 'static,
+    R: SymValue<C, Value = RHS> + 'static,
     LHS: Value + std::ops::Add<RHS, Output = OUT>,
     RHS: Value,
     OUT: Value,
@@ -78,10 +86,6 @@ where
     type Output = Sym<OUT, C, E>;
 
     fn add(self, rhs: R) -> Self::Output {
-        Sym::Expr(E::wrap(Add {
-            lhs: self.clone(),
-            rhs,
-            ctx: PhantomData,
-        }))
+        Sym::Expr(E::wrap(Add::new(self.clone(), rhs)))
     }
 }

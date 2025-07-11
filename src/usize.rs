@@ -1,12 +1,12 @@
-use crate::{Context, RcExpr, Sym, Value};
+use crate::{impl_sym_val, impl_val_bin_ops};
 
-impl Value for usize {}
+impl_sym_val!(usize, SymUsize);
 
-pub type SymUsize<C, E = RcExpr> = Sym<usize, C, E>;
+impl_val_bin_ops!(usize, Add, add);
 
 #[cfg(test)]
 mod tests {
-    use crate::{SymCtx, SymValue};
+    use crate::{Context, SymCtx, SymValue};
 
     use super::*;
 
@@ -32,9 +32,10 @@ mod tests {
         let result = z.eval(&ctx).unwrap();
         assert_eq!(result, 6);
 
-        let w = z + k;
+        let c = 3;
+        let w = &c + 2 + z + k + 3;
         let result = w.eval(&ctx).unwrap();
-        assert_eq!(result, 8);
+        assert_eq!(result, 16);
 
         println!("{:?}", w);
     }
