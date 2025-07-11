@@ -32,7 +32,7 @@ where
     fn get_symbol(&self, symbol: Symbol) -> Result<T> {
         self.get(&symbol)
             .cloned()
-            .ok_or_else(|| SymError::SymbolNotFound(symbol))
+            .ok_or(SymError::undefined_symbol::<T>(symbol))
     }
 
     fn set_symbol(&mut self, symbol: impl AsRef<str>, value: T) {
