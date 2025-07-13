@@ -83,3 +83,50 @@ macro_rules! impl_val_bin_ops {
         }
     };
 }
+
+#[macro_export]
+macro_rules! int_impl {
+    ($T:ident, $S:ident) => {
+        $crate::impl_sym_val!($T, $S);
+
+        $crate::impl_val_bin_ops!($T, Add, add);
+        $crate::impl_val_bin_ops!($T, Sub, sub);
+        $crate::impl_val_bin_ops!($T, Mul, mul);
+        $crate::impl_val_bin_ops!($T, Div, div);
+        $crate::impl_val_bin_ops!($T, BitAnd, bitand);
+        $crate::impl_val_bin_ops!($T, BitOr, bitor);
+        $crate::impl_val_bin_ops!($T, BitXor, bitxor);
+        $crate::impl_val_bin_ops!($T, Shl, shl);
+        $crate::impl_val_bin_ops!($T, Shr, shr);
+        $crate::impl_val_bin_ops!($T, Rem, rem);
+    };
+}
+
+#[macro_export]
+macro_rules! uint_impl {
+    ($T:ident, $S:ident) => {
+        $crate::impl_sym_val!($T, $S);
+
+        $crate::impl_val_bin_ops!($T, Add, add);
+        $crate::impl_val_bin_ops!($T, Sub, sub);
+        $crate::impl_val_bin_ops!($T, Mul, mul);
+        $crate::impl_val_bin_ops!($T, Div, div);
+        $crate::impl_val_bin_ops!($T, BitAnd, bitand);
+        $crate::impl_val_bin_ops!($T, BitOr, bitor);
+        $crate::impl_val_bin_ops!($T, BitXor, bitxor);
+        $crate::impl_val_bin_ops!($T, Shl, shl);
+        $crate::impl_val_bin_ops!($T, Shr, shr);
+        $crate::impl_val_bin_ops!($T, Rem, rem);
+    };
+}
+
+#[macro_export]
+macro_rules! float_impl {
+    ($T:ident, $S:ident) => {
+        $crate::impl_sym_val!($T, $S);
+        $crate::impl_val_bin_ops!($T, Add, add);
+        $crate::impl_val_bin_ops!($T, Sub, sub);
+        $crate::impl_val_bin_ops!($T, Mul, mul);
+        $crate::impl_val_bin_ops!($T, Div, div);
+    };
+}
