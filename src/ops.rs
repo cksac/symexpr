@@ -25,6 +25,12 @@ pub use neg::Neg;
 mod not;
 pub use not::Not;
 
+mod shl;
+pub use shl::Shl;
+
+mod shr;
+pub use shr::Shr;
+
 mod eq;
 pub use eq::{Eq, SymEq};
 
