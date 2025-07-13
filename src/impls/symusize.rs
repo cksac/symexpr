@@ -6,3 +6,6 @@ impl_val_bin_ops!(usize, Add, add);
 impl_val_bin_ops!(usize, Sub, sub);
 impl_val_bin_ops!(usize, Mul, mul);
 impl_val_bin_ops!(usize, Div, div);
+impl_val_bin_ops!(usize, BitAnd, bitand);
+impl_val_bin_ops!(usize, BitOr, bitor);
+impl_val_bin_ops!(usize, BitXor, bitxor);

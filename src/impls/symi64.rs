@@ -6,3 +6,6 @@ impl_val_bin_ops!(i64, Add, add);
 impl_val_bin_ops!(i64, Sub, sub);
 impl_val_bin_ops!(i64, Mul, mul);
 impl_val_bin_ops!(i64, Div, div);
+impl_val_bin_ops!(i64, BitAnd, bitand);
+impl_val_bin_ops!(i64, BitOr, bitor);
+impl_val_bin_ops!(i64, BitXor, bitxor);

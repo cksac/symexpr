@@ -110,7 +110,7 @@ where
     E: SymExpr<LHS> + SymExpr<bool>,
 {
     #[inline(always)]
-    fn and<RHS>(&self, rhs: RHS) -> Sym<bool, C, E>
+    pub fn and<RHS>(&self, rhs: RHS) -> Sym<bool, C, E>
     where
         for<'a> &'a Self: SymAnd<C, E, RHS>,
     {

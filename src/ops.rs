@@ -10,6 +10,15 @@ pub use mul::Mul;
 mod div;
 pub use div::Div;
 
+mod bitand;
+pub use bitand::BitAnd;
+
+mod bitor;
+pub use bitor::BitOr;
+
+mod bitxor;
+pub use bitxor::BitXor;
+
 mod eq;
 pub use eq::{Eq, SymEq};
 
