@@ -9,3 +9,6 @@ impl_val_bin_ops!(isize, Div, div);
 impl_val_bin_ops!(isize, BitAnd, bitand);
 impl_val_bin_ops!(isize, BitOr, bitor);
 impl_val_bin_ops!(isize, BitXor, bitxor);
+impl_val_bin_ops!(isize, Shl, shl);
+impl_val_bin_ops!(isize, Shr, shr);
+impl_val_bin_ops!(isize, Rem, rem);
