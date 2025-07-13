@@ -18,7 +18,6 @@ pub use impls::*;
 
 #[cfg(test)]
 mod tests {
-    use crate::ops::{SymEq, SymGe};
     use crate::{Context, SymCtx, SymUsize, SymValue};
 
     type Usize = SymUsize;

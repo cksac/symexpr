@@ -104,3 +104,30 @@ where
         Sym::<bool, C, E>::Expr(E::lift(Gt::new(self.clone(), rhs.clone())))
     }
 }
+
+impl<C, E, RHS> SymGt<C, E, RHS> for Sym<bool, C, E>
+where
+    C: SymCtx<bool>,
+    E: SymExpr<bool>,
+    RHS: Value + Into<bool>,
+{
+    fn gt(self, rhs: RHS) -> Sym<bool, C, E> {
+        let rhs = Sym::<bool, C, E>::constant(rhs.into());
+        Sym::<bool, C, E>::Expr(E::lift(Gt::new(self, rhs)))
+    }
+}
+
+impl<C, E, LHS> Sym<LHS, C, E>
+where
+    LHS: Value,
+    C: SymCtx<LHS> + SymCtx<bool>,
+    E: SymExpr<LHS> + SymExpr<bool>,
+{
+    #[inline(always)]
+    pub fn gt<RHS>(&self, rhs: RHS) -> Sym<bool, C, E>
+    where
+        for<'a> &'a Self: SymGt<C, E, RHS>,
+    {
+        SymGt::gt(self, rhs)
+    }
+}

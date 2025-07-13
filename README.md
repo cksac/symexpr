@@ -14,7 +14,6 @@ cargo add symexpr
 
 ## Usage
 ```rust
-use symexpr::ops::{SymEq, SymGe};
 use symexpr::{Context, SymCtx, SymValue, SymUsize};
 
 type Usize = SymUsize;
