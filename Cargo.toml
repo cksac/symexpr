@@ -6,6 +6,8 @@ description = "A libray to build symbolic expression and evaluation."
 keywords = ["expression", "evaluate", "symbolic"]
 categories = ["science"]
 edition = "2024"
+repository = "https://github.com/cksac/symexpr"
+homepage = "https://github.com/cksac/symexpr"
 readme = "README.md"
 license = "MIT OR Apache-2.0"
 
