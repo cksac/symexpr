@@ -11,6 +11,9 @@ pub use context::*;
 
 pub mod ops;
 
+pub mod symfn;
+pub use symfn::*;
+
 mod macros;
 
 mod impls;
