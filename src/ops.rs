@@ -31,6 +31,9 @@ pub use shl::Shl;
 mod shr;
 pub use shr::Shr;
 
+mod rem;
+pub use rem::Rem;
+
 mod eq;
 pub use eq::{Eq, SymEq};
 
