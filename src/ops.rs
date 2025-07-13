@@ -19,6 +19,12 @@ pub use bitor::BitOr;
 mod bitxor;
 pub use bitxor::BitXor;
 
+mod neg;
+pub use neg::Neg;
+
+mod not;
+pub use not::Not;
+
 mod eq;
 pub use eq::{Eq, SymEq};
 
