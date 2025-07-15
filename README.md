@@ -26,12 +26,13 @@ cargo add symexpr
 ```rust
 use symexpr::{Context, SymCtx, SymValue, SymUsize, SymF32};
 type Usize = SymUsize;
+type F32 = SymF32;
 
 fn main() {
     // Symbolic variables and constants
-    let x = Usize::symbol("a");
-    let y = Usize::constant(4);
-    let k = Usize::constant(2);
+    let x = &Usize::symbol("a");
+    let y = &Usize::constant(4);
+    let k = &Usize::constant(2);
 
     // Context for evaluation
     let mut ctx = Context::default();
@@ -57,7 +58,7 @@ fn main() {
     assert_eq!(w.eval(&ctx).unwrap(), 16);
 
     // Symbolic math functions (e.g., floor)
-    let xf = SymF32::symbol("f");
+    let xf = F32::symbol("f");
     ctx.set_symbol("f", 3.7f32);
     let floor_xf = xf.floor();
     assert_eq!(floor_xf.eval(&ctx).unwrap(), 3.0);
@@ -70,7 +71,7 @@ You can extend symbolic operations in two main ways:
 
 ### 1. Implement symbolic functions using `SymFn`
 
-For most primitive functions (e.g., `abs`, `floor`, `sqrt`), you can wrap the function using `SymFn`:
+For most functions (e.g., `abs`, `floor`, `sqrt`), you can wrap the function using `SymFn`:
 
 ```rust
 use symexpr::{Sym, SymCtx, SymFn, SymF32};
@@ -80,8 +81,22 @@ where
     C: SymCtx<f32>,
     E: SymExpr<f32>,
 {
-    pub fn abs(&self) -> Self {
-        Self::Expr(E::lift(SymFn::new("abs", (self.clone(),), f32::abs)))
+    pub fn abs(&self) -> SymF32<C, E> {
+        SymF32::<C, E>::Expr(E::lift(SymFn::new("abs", (self.clone(),), f32::abs)))
+    }
+
+    pub fn max(&self, other: impl Into<SymF32<C, E>>) -> SymF32<C, E> {
+        #[inline(always)]
+        fn _max(x: (f32, f32)) -> f32 {
+            let (self_val, other_val) = x;
+            self_val.max(other_val)
+        }
+        let other = other.into();
+        SymF32::<C, E>::Expr(E::lift(SymFn::new(
+            "max",
+            (self.clone(), other),
+            _max,
+        )))
     }
 }
 
