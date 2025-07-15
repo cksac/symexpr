@@ -1,4 +1,9 @@
-use std::{fmt::{Debug, Display}, ops::Deref, rc::Rc, sync::Arc};
+use std::{
+    fmt::{Debug, Display},
+    ops::Deref,
+    rc::Rc,
+    sync::Arc,
+};
 
 use crate::{Context, Result, Symbol};
 
@@ -146,17 +151,20 @@ where
             Sym::Expr(e) => e.eval(ctx),
         }
     }
-    
+
     fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Sym::Symbol(s) => write!(f, "{}", s),
             Sym::Const(v) => write!(f, "{:?}", v),
             Sym::Expr(e) => e.display(f),
         }
-    }    
+    }
 }
 
-impl<T> Value for Option<T> where T: Value {
+impl<T> Value for Option<T>
+where
+    T: Value,
+{
     fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Some(value) => value.display(f),

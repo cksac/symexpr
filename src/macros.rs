@@ -150,6 +150,7 @@ macro_rules! int_impl {
                 E: $crate::SymExpr<$UT>,
             {
                 $crate::$US::<C, E>::Expr(E::lift($crate::SymFn::new(
+                    "cast_unsigned",
                     (self.clone(),),
                     $T::cast_unsigned,
                 )))
@@ -170,6 +171,7 @@ macro_rules! int_impl {
                 }
                 let rhs = rhs.into();
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_add_unsigned",
                     (self.clone(), rhs),
                     _checked_add_unsigned,
                 )))
@@ -187,6 +189,7 @@ macro_rules! int_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "saturating_add_unsigned",
                     (self.clone(), rhs),
                     _saturating_add_unsigned,
                 )))
@@ -207,6 +210,7 @@ macro_rules! int_impl {
                 }
                 let rhs = rhs.into();
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_sub_unsigned",
                     (self.clone(), rhs),
                     _checked_sub_unsigned,
                 )))
@@ -224,6 +228,7 @@ macro_rules! int_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "saturating_sub_unsigned",
                     (self.clone(), rhs),
                     _saturating_sub_unsigned,
                 )))
@@ -241,6 +246,7 @@ macro_rules! int_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "wrapping_add_unsigned",
                     (self.clone(), rhs),
                     _wrapping_add_unsigned,
                 )))
@@ -258,6 +264,7 @@ macro_rules! int_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "wrapping_sub_unsigned",
                     (self.clone(), rhs),
                     _wrapping_sub_unsigned,
                 )))
@@ -269,6 +276,7 @@ macro_rules! int_impl {
                 E: $crate::SymExpr<Option<$T>>,
             {
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_abs",
                     (self.clone(),),
                     $T::checked_abs,
                 )))
@@ -280,6 +288,7 @@ macro_rules! int_impl {
                 E: $crate::SymExpr<$UT>,
             {
                 $crate::$US::<C, E>::Expr(E::lift($crate::SymFn::new(
+                    "unsigned_abs",
                     (self.clone(),),
                     $T::unsigned_abs,
                 )))
@@ -296,15 +305,20 @@ macro_rules! int_impl {
                     self_val.abs_diff(rhs_val)
                 }
                 let rhs = rhs.into();
-                $crate::$US::Expr(E::lift($crate::SymFn::new((self.clone(), rhs), _abs_diff)))
+                $crate::$US::Expr(E::lift($crate::SymFn::new(
+                    "abs_diff",
+                    (self.clone(), rhs),
+                    _abs_diff,
+                )))
             }
 
             pub fn abs(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::abs)))
+                $S::Expr(E::lift($crate::SymFn::new("abs", (self.clone(),), $T::abs)))
             }
 
             pub fn wrapping_abs(&self) -> $S<C, E> {
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "wrapping_abs",
                     (self.clone(),),
                     $T::wrapping_abs,
                 )))
@@ -312,6 +326,7 @@ macro_rules! int_impl {
 
             pub fn saturating_abs(&self) -> $S<C, E> {
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "saturating_abs",
                     (self.clone(),),
                     $T::saturating_abs,
                 )))
@@ -319,13 +334,18 @@ macro_rules! int_impl {
 
             pub fn saturating_neg(&self) -> $S<C, E> {
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "saturating_neg",
                     (self.clone(),),
                     $T::saturating_neg,
                 )))
             }
 
             pub fn signum(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::signum)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "signum",
+                    (self.clone(),),
+                    $T::signum,
+                )))
             }
 
             pub fn is_positive(&self) -> $crate::SymBool<C, E>
@@ -334,6 +354,7 @@ macro_rules! int_impl {
                 E: $crate::SymExpr<bool>,
             {
                 $crate::SymBool::Expr(E::lift($crate::SymFn::new(
+                    "is_positive",
                     (self.clone(),),
                     $T::is_positive,
                 )))
@@ -345,6 +366,7 @@ macro_rules! int_impl {
                 E: $crate::SymExpr<bool>,
             {
                 $crate::SymBool::Expr(E::lift($crate::SymFn::new(
+                    "is_negative",
                     (self.clone(),),
                     $T::is_negative,
                 )))
@@ -369,6 +391,7 @@ macro_rules! uint_impl {
                 E: $crate::SymExpr<$ST>,
             {
                 $crate::$SS::<C, E>::Expr(E::lift($crate::SymFn::new(
+                    "cast_signed",
                     (self.clone(),),
                     $T::cast_signed,
                 )))
@@ -389,6 +412,7 @@ macro_rules! uint_impl {
                 }
                 let rhs = rhs.into();
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_add_signed",
                     (self.clone(), rhs),
                     _checked_add_signed,
                 )))
@@ -406,6 +430,7 @@ macro_rules! uint_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "saturating_add_signed",
                     (self.clone(), rhs),
                     _saturating_add_signed,
                 )))
@@ -423,6 +448,7 @@ macro_rules! uint_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "wrapping_add_signed",
                     (self.clone(), rhs),
                     _wrapping_add_signed,
                 )))
@@ -435,7 +461,11 @@ macro_rules! uint_impl {
                     self_val.abs_diff(rhs_val)
                 }
                 let rhs = rhs.into();
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(), rhs), _abs_diff)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "abs_diff",
+                    (self.clone(), rhs),
+                    _abs_diff,
+                )))
             }
 
             pub fn div_ceil(&self, rhs: impl Into<$S<C, E>>) -> $S<C, E> {
@@ -445,7 +475,11 @@ macro_rules! uint_impl {
                     self_val.div_ceil(rhs_val)
                 }
                 let rhs = rhs.into();
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(), rhs), _div_ceil)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "div_ceil",
+                    (self.clone(), rhs),
+                    _div_ceil,
+                )))
             }
 
             pub fn checked_next_multiple_of(
@@ -463,6 +497,7 @@ macro_rules! uint_impl {
                 }
                 let rhs = rhs.into();
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_next_multiple_of",
                     (self.clone(), rhs),
                     _checked_next_multiple_of,
                 )))
@@ -476,6 +511,7 @@ macro_rules! uint_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "next_multiple_of",
                     (self.clone(), rhs),
                     _next_multiple_of,
                 )))
@@ -493,6 +529,7 @@ macro_rules! uint_impl {
                 }
                 let rhs = rhs.into();
                 $crate::SymBool::Expr(E::lift($crate::SymFn::new(
+                    "is_multiple_of",
                     (self.clone(), rhs),
                     _is_multiple_of,
                 )))
@@ -504,6 +541,7 @@ macro_rules! uint_impl {
                 E: $crate::SymExpr<Option<$T>>,
             {
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_next_power_of_two",
                     (self.clone(),),
                     $T::checked_next_power_of_two,
                 )))
@@ -515,6 +553,7 @@ macro_rules! uint_impl {
                 E: $crate::SymExpr<bool>,
             {
                 $crate::SymBool::Expr(E::lift($crate::SymFn::new(
+                    "is_power_of_two",
                     (self.clone(),),
                     $T::is_power_of_two,
                 )))
@@ -522,6 +561,7 @@ macro_rules! uint_impl {
 
             pub fn next_power_of_two(&self) -> $S<C, E> {
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "next_power_of_two",
                     (self.clone(),),
                     $T::next_power_of_two,
                 )))
@@ -556,7 +596,11 @@ macro_rules! integer_common_impl {
                 C: $crate::SymCtx<u32>,
                 E: $crate::SymExpr<u32>,
             {
-                $crate::SymU32::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::count_ones)))
+                $crate::SymU32::Expr(E::lift($crate::SymFn::new(
+                    "count_ones",
+                    (self.clone(),),
+                    $T::count_ones,
+                )))
             }
 
             pub fn count_zeros(&self) -> $crate::SymU32<C, E>
@@ -565,6 +609,7 @@ macro_rules! integer_common_impl {
                 E: $crate::SymExpr<u32>,
             {
                 $crate::SymU32::Expr(E::lift($crate::SymFn::new(
+                    "count_zeros",
                     (self.clone(),),
                     $T::count_zeros,
                 )))
@@ -576,6 +621,7 @@ macro_rules! integer_common_impl {
                 E: $crate::SymExpr<u32>,
             {
                 $crate::SymU32::Expr(E::lift($crate::SymFn::new(
+                    "leading_zeros",
                     (self.clone(),),
                     $T::leading_zeros,
                 )))
@@ -587,6 +633,7 @@ macro_rules! integer_common_impl {
                 E: $crate::SymExpr<u32>,
             {
                 $crate::SymU32::Expr(E::lift($crate::SymFn::new(
+                    "trailing_zeros",
                     (self.clone(),),
                     $T::trailing_zeros,
                 )))
@@ -598,6 +645,7 @@ macro_rules! integer_common_impl {
                 E: $crate::SymExpr<u32>,
             {
                 $crate::SymU32::Expr(E::lift($crate::SymFn::new(
+                    "leading_ones",
                     (self.clone(),),
                     $T::leading_ones,
                 )))
@@ -609,6 +657,7 @@ macro_rules! integer_common_impl {
                 E: $crate::SymExpr<u32>,
             {
                 $crate::SymU32::Expr(E::lift($crate::SymFn::new(
+                    "trailing_ones",
                     (self.clone(),),
                     $T::trailing_ones,
                 )))
@@ -626,6 +675,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "rotate_left",
                     (self.clone(), rhs),
                     _rotate_left,
                 )))
@@ -643,17 +693,23 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "rotate_right",
                     (self.clone(), rhs),
                     _rotate_right,
                 )))
             }
 
             pub fn swap_bytes(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::swap_bytes)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "swap_bytes",
+                    (self.clone(),),
+                    $T::swap_bytes,
+                )))
             }
 
             pub fn reverse_bits(&self) -> $S<C, E> {
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "reverse_bits",
                     (self.clone(),),
                     $T::reverse_bits,
                 )))
@@ -661,20 +717,28 @@ macro_rules! integer_common_impl {
 
             pub fn from_be(x: impl Into<$S<C, E>>) -> $S<C, E> {
                 let x = x.into();
-                $S::Expr(E::lift($crate::SymFn::new((x,), $T::from_be)))
+                $S::Expr(E::lift($crate::SymFn::new("from_be", (x,), $T::from_be)))
             }
 
             pub fn from_le(x: impl Into<$S<C, E>>) -> $S<C, E> {
                 let x = x.into();
-                $S::Expr(E::lift($crate::SymFn::new((x,), $T::from_le)))
+                $S::Expr(E::lift($crate::SymFn::new("from_le", (x,), $T::from_le)))
             }
 
             pub fn to_be(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::to_be)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "to_be",
+                    (self.clone(),),
+                    $T::to_be,
+                )))
             }
 
             pub fn to_le(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::to_le)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "to_le",
+                    (self.clone(),),
+                    $T::to_le,
+                )))
             }
 
             pub fn checked_add(&self, rhs: impl Into<$S<C, E>>) -> $crate::Sym<Option<$T>, C, E>
@@ -689,6 +753,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_add",
                     (self.clone(), rhs),
                     _checked_add,
                 )))
@@ -706,6 +771,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "unchecked_add",
                     (self.clone(), rhs),
                     _unchecked_add,
                 )))
@@ -723,6 +789,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_sub",
                     (self.clone(), rhs),
                     _checked_sub,
                 )))
@@ -740,6 +807,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "unchecked_sub",
                     (self.clone(), rhs),
                     _unchecked_sub,
                 )))
@@ -757,6 +825,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_mul",
                     (self.clone(), rhs),
                     _checked_mul,
                 )))
@@ -774,6 +843,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "unchecked_mul",
                     (self.clone(), rhs),
                     _unchecked_mul,
                 )))
@@ -791,6 +861,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_div",
                     (self.clone(), rhs),
                     _checked_div,
                 )))
@@ -811,6 +882,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_div_euclid",
                     (self.clone(), rhs),
                     _checked_div_euclid,
                 )))
@@ -828,6 +900,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_rem",
                     (self.clone(), rhs),
                     _checked_rem,
                 )))
@@ -848,6 +921,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_rem_euclid",
                     (self.clone(), rhs),
                     _checked_rem_euclid,
                 )))
@@ -865,6 +939,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "unbounded_shl",
                     (self.clone(), rhs),
                     _unbounded_shl,
                 )))
@@ -882,6 +957,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "unbounded_shr",
                     (self.clone(), rhs),
                     _unbounded_shr,
                 )))
@@ -895,6 +971,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "saturating_add",
                     (self.clone(), rhs),
                     _saturating_add,
                 )))
@@ -908,6 +985,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "saturating_sub",
                     (self.clone(), rhs),
                     _saturating_sub,
                 )))
@@ -921,6 +999,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "saturating_mul",
                     (self.clone(), rhs),
                     _saturating_mul,
                 )))
@@ -934,6 +1013,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "saturating_div",
                     (self.clone(), rhs),
                     _saturating_div,
                 )))
@@ -954,6 +1034,7 @@ macro_rules! integer_common_impl {
                 }
                 let n = n.into();
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_pow",
                     (self.clone(), n),
                     _checked_pow,
                 )))
@@ -971,6 +1052,7 @@ macro_rules! integer_common_impl {
                 }
                 let n = n.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "saturating_pow",
                     (self.clone(), n),
                     _saturating_pow,
                 )))
@@ -984,6 +1066,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "wrapping_add",
                     (self.clone(), rhs),
                     _wrapping_add,
                 )))
@@ -997,6 +1080,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "wrapping_sub",
                     (self.clone(), rhs),
                     _wrapping_sub,
                 )))
@@ -1010,6 +1094,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "wrapping_mul",
                     (self.clone(), rhs),
                     _wrapping_mul,
                 )))
@@ -1023,6 +1108,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "wrapping_div",
                     (self.clone(), rhs),
                     _wrapping_div,
                 )))
@@ -1036,6 +1122,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "wrapping_div_euclid",
                     (self.clone(), rhs),
                     _wrapping_div_euclid,
                 )))
@@ -1049,6 +1136,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "wrapping_rem",
                     (self.clone(), rhs),
                     _wrapping_rem,
                 )))
@@ -1062,6 +1150,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "wrapping_rem_euclid",
                     (self.clone(), rhs),
                     _wrapping_rem_euclid,
                 )))
@@ -1069,6 +1158,7 @@ macro_rules! integer_common_impl {
 
             pub fn wrapping_neg(&self) -> $S<C, E> {
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "wrapping_neg",
                     (self.clone(),),
                     $T::wrapping_neg,
                 )))
@@ -1086,6 +1176,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "wrapping_shl",
                     (self.clone(), rhs),
                     _wrapping_shl,
                 )))
@@ -1103,6 +1194,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "wrapping_shr",
                     (self.clone(), rhs),
                     _wrapping_shr,
                 )))
@@ -1120,6 +1212,7 @@ macro_rules! integer_common_impl {
                 }
                 let n = n.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "wrapping_pow",
                     (self.clone(), n),
                     _wrapping_pow,
                 )))
@@ -1136,11 +1229,19 @@ macro_rules! integer_common_impl {
                     self_val.pow(exp_val)
                 }
                 let exp = exp.into();
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(), exp), _pow)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "pow",
+                    (self.clone(), exp),
+                    _pow,
+                )))
             }
 
             pub fn isqrt(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::isqrt)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "isqrt",
+                    (self.clone(),),
+                    $T::isqrt,
+                )))
             }
 
             pub fn div_euclid(&self, rhs: impl Into<$S<C, E>>) -> $S<C, E> {
@@ -1151,6 +1252,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "div_euclid",
                     (self.clone(), rhs),
                     _div_euclid,
                 )))
@@ -1164,6 +1266,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "rem_euclid",
                     (self.clone(), rhs),
                     _rem_euclid,
                 )))
@@ -1180,7 +1283,11 @@ macro_rules! integer_common_impl {
                     self_val.ilog(base_val)
                 }
                 let base = base.into();
-                $crate::SymU32::Expr(E::lift($crate::SymFn::new((self.clone(), base), _ilog)))
+                $crate::SymU32::Expr(E::lift($crate::SymFn::new(
+                    "ilog",
+                    (self.clone(), base),
+                    _ilog,
+                )))
             }
 
             pub fn ilog2(&self) -> $crate::SymU32<C, E>
@@ -1188,7 +1295,11 @@ macro_rules! integer_common_impl {
                 C: $crate::SymCtx<u32>,
                 E: $crate::SymExpr<u32>,
             {
-                $crate::SymU32::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::ilog2)))
+                $crate::SymU32::Expr(E::lift($crate::SymFn::new(
+                    "ilog2",
+                    (self.clone(),),
+                    $T::ilog2,
+                )))
             }
 
             pub fn ilog10(&self) -> $crate::SymU32<C, E>
@@ -1196,7 +1307,11 @@ macro_rules! integer_common_impl {
                 C: $crate::SymCtx<u32>,
                 E: $crate::SymExpr<u32>,
             {
-                $crate::SymU32::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::ilog10)))
+                $crate::SymU32::Expr(E::lift($crate::SymFn::new(
+                    "ilog10",
+                    (self.clone(),),
+                    $T::ilog10,
+                )))
             }
 
             pub fn checked_ilog(&self, base: impl Into<$S<C, E>>) -> $crate::Sym<Option<u32>, C, E>
@@ -1211,6 +1326,7 @@ macro_rules! integer_common_impl {
                 }
                 let base = base.into();
                 $crate::Sym::<Option<u32>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_ilog",
                     (self.clone(), base),
                     _checked_ilog,
                 )))
@@ -1226,6 +1342,7 @@ macro_rules! integer_common_impl {
                     x.checked_ilog2()
                 }
                 $crate::Sym::<Option<u32>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_ilog2",
                     (self.clone(),),
                     _checked_ilog2,
                 )))
@@ -1241,6 +1358,7 @@ macro_rules! integer_common_impl {
                     x.checked_ilog10()
                 }
                 $crate::Sym::<Option<u32>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_ilog10",
                     (self.clone(),),
                     _checked_ilog10,
                 )))
@@ -1256,6 +1374,7 @@ macro_rules! integer_common_impl {
                     x.checked_neg()
                 }
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_neg",
                     (self.clone(),),
                     _checked_neg,
                 )))
@@ -1276,6 +1395,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_shl",
                     (self.clone(), rhs),
                     _checked_shl,
                 )))
@@ -1296,6 +1416,7 @@ macro_rules! integer_common_impl {
                 }
                 let rhs = rhs.into();
                 $crate::Sym::<Option<$T>, C, E>::Expr(E::lift($crate::SymFn::new(
+                    "checked_shr",
                     (self.clone(), rhs),
                     _checked_shr,
                 )))
@@ -1308,7 +1429,11 @@ macro_rules! integer_common_impl {
                     self_val.midpoint(rhs_val)
                 }
                 let rhs = rhs.into();
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(), rhs), _midpoint)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "midpoint",
+                    (self.clone(), rhs),
+                    _midpoint,
+                )))
             }
         }
     };
@@ -1329,30 +1454,51 @@ macro_rules! float_impl {
             E: $crate::SymExpr<$T>,
         {
             pub fn floor(&self) -> Self {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::floor)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "floor",
+                    (self.clone(),),
+                    $T::floor,
+                )))
             }
 
             pub fn ceil(&self) -> Self {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::ceil)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "ceil",
+                    (self.clone(),),
+                    $T::ceil,
+                )))
             }
 
             pub fn round(&self) -> Self {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::round)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "round",
+                    (self.clone(),),
+                    $T::round,
+                )))
             }
 
             pub fn round_ties_even(&self) -> Self {
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "round_ties_even",
                     (self.clone(),),
                     $T::round_ties_even,
                 )))
             }
 
             pub fn trunc(&self) -> Self {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::trunc)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "trunc",
+                    (self.clone(),),
+                    $T::trunc,
+                )))
             }
 
             pub fn fract(&self) -> Self {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::fract)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "fract",
+                    (self.clone(),),
+                    $T::fract,
+                )))
             }
 
             pub fn mul_add(&self, a: impl Into<$S<C, E>>, b: impl Into<$S<C, E>>) -> $S<C, E> {
@@ -1363,7 +1509,11 @@ macro_rules! float_impl {
                 }
                 let a = a.into();
                 let b = b.into();
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(), a, b), _mul_add)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "mul_add",
+                    (self.clone(), a, b),
+                    _mul_add,
+                )))
             }
 
             pub fn div_euclid(&self, rhs: impl Into<$S<C, E>>) -> $S<C, E> {
@@ -1374,6 +1524,7 @@ macro_rules! float_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "div_euclid",
                     (self.clone(), rhs),
                     _div_euclid,
                 )))
@@ -1387,6 +1538,7 @@ macro_rules! float_impl {
                 }
                 let rhs = rhs.into();
                 $S::Expr(E::lift($crate::SymFn::new(
+                    "rem_euclid",
                     (self.clone(), rhs),
                     _rem_euclid,
                 )))
@@ -1403,7 +1555,11 @@ macro_rules! float_impl {
                     self_val.powi(n)
                 }
                 let n = n.into();
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(), n), _powi)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "powi",
+                    (self.clone(), n),
+                    _powi,
+                )))
             }
 
             pub fn powf(&self, n: impl Into<$S<C, E>>) -> $S<C, E> {
@@ -1413,23 +1569,35 @@ macro_rules! float_impl {
                     self_val.powf(n_val)
                 }
                 let n = n.into();
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(), n), _powf)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "powf",
+                    (self.clone(), n),
+                    _powf,
+                )))
             }
 
             pub fn sqrt(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::sqrt)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "sqrt",
+                    (self.clone(),),
+                    $T::sqrt,
+                )))
             }
 
             pub fn exp(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::exp)))
+                $S::Expr(E::lift($crate::SymFn::new("exp", (self.clone(),), $T::exp)))
             }
 
             pub fn exp2(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::exp2)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "exp2",
+                    (self.clone(),),
+                    $T::exp2,
+                )))
             }
 
             pub fn ln(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::ln)))
+                $S::Expr(E::lift($crate::SymFn::new("ln", (self.clone(),), $T::ln)))
             }
 
             pub fn log(&self, base: impl Into<$S<C, E>>) -> $S<C, E> {
@@ -1439,19 +1607,35 @@ macro_rules! float_impl {
                     self_val.log(base_val)
                 }
                 let base = base.into();
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(), base), _log)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "log",
+                    (self.clone(), base),
+                    _log,
+                )))
             }
 
             pub fn log2(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::log2)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "log2",
+                    (self.clone(),),
+                    $T::log2,
+                )))
             }
 
             pub fn log10(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::log10)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "log10",
+                    (self.clone(),),
+                    $T::log10,
+                )))
             }
 
             pub fn cbrt(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::cbrt)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "cbrt",
+                    (self.clone(),),
+                    $T::cbrt,
+                )))
             }
 
             pub fn hypot(&self, other: impl Into<$S<C, E>>) -> $S<C, E> {
@@ -1461,31 +1645,47 @@ macro_rules! float_impl {
                     self_val.hypot(other_val)
                 }
                 let other = other.into();
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(), other), _hypot)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "hypot",
+                    (self.clone(), other),
+                    _hypot,
+                )))
             }
 
             pub fn sin(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::sin)))
+                $S::Expr(E::lift($crate::SymFn::new("sin", (self.clone(),), $T::sin)))
             }
 
             pub fn cos(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::cos)))
+                $S::Expr(E::lift($crate::SymFn::new("cos", (self.clone(),), $T::cos)))
             }
 
             pub fn tan(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::tan)))
+                $S::Expr(E::lift($crate::SymFn::new("tan", (self.clone(),), $T::tan)))
             }
 
             pub fn asin(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::asin)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "asin",
+                    (self.clone(),),
+                    $T::asin,
+                )))
             }
 
             pub fn acos(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::acos)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "acos",
+                    (self.clone(),),
+                    $T::acos,
+                )))
             }
 
             pub fn atan(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::atan)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "atan",
+                    (self.clone(),),
+                    $T::atan,
+                )))
             }
 
             pub fn atan2(&self, other: impl Into<$S<C, E>>) -> $S<C, E> {
@@ -1495,41 +1695,77 @@ macro_rules! float_impl {
                     self_val.atan2(other_val)
                 }
                 let other = other.into();
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(), other), _atan2)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "atan2",
+                    (self.clone(), other),
+                    _atan2,
+                )))
             }
 
             // TODO: sin_cost, not support tuple value output now
 
             pub fn exp_m1(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::exp_m1)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "exp_m1",
+                    (self.clone(),),
+                    $T::exp_m1,
+                )))
             }
 
             pub fn ln_1p(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::ln_1p)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "ln_1p",
+                    (self.clone(),),
+                    $T::ln_1p,
+                )))
             }
 
             pub fn sinh(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::sinh)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "sinh",
+                    (self.clone(),),
+                    $T::sinh,
+                )))
             }
 
             pub fn cosh(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::cosh)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "cosh",
+                    (self.clone(),),
+                    $T::cosh,
+                )))
             }
 
             pub fn tanh(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::tanh)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "tanh",
+                    (self.clone(),),
+                    $T::tanh,
+                )))
             }
 
             pub fn asinh(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::asinh)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "asinh",
+                    (self.clone(),),
+                    $T::asinh,
+                )))
             }
 
             pub fn acosh(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::acosh)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "acosh",
+                    (self.clone(),),
+                    $T::acosh,
+                )))
             }
 
             pub fn atanh(&self) -> $S<C, E> {
-                $S::Expr(E::lift($crate::SymFn::new((self.clone(),), $T::atanh)))
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "atanh",
+                    (self.clone(),),
+                    $T::atanh,
+                )))
             }
         }
     };

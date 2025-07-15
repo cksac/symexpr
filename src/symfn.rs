@@ -2,13 +2,14 @@ use crate::{Result, SymCtx, SymValue, Value};
 
 #[derive(Debug)]
 pub struct SymFn<S, I, O> {
+    name: &'static str,
     input: S,
     func: fn(I) -> O,
 }
 
 impl<S, I, O> SymFn<S, I, O> {
-    pub fn new(input: S, func: fn(I) -> O) -> Self {
-        SymFn { input, func }
+    pub fn new(name: &'static str, input: S, func: fn(I) -> O) -> Self {
+        SymFn { name, input, func }
     }
 }
 
@@ -25,8 +26,9 @@ where
         let input = self.input.0.eval(ctx)?;
         Ok((self.func)(input))
     }
-    
+
     fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.name)?;
         f.write_str("(")?;
         self.input.0.display(f)?;
         f.write_str(")")?;
@@ -53,6 +55,7 @@ where
     }
 
     fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.name)?;
         f.write_str("(")?;
         self.input.0.display(f)?;
         f.write_str(", ")?;
@@ -84,6 +87,7 @@ where
     }
 
     fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.name)?;
         f.write_str("(")?;
         self.input.0.display(f)?;
         f.write_str(", ")?;
