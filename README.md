@@ -119,6 +119,30 @@ where
     fn eq(self, rhs: R) -> Sym<bool, C, E>;
 }
 
+#[derive(Debug, Clone)]
+pub struct Eq<C, E, L, R>
+where
+    L: Value,
+    R: Value,
+    C: SymCtx<L> + SymCtx<R>,
+    E: SymExpr<L> + SymExpr<R>,
+{
+    lhs: Sym<L, C, E>,
+    rhs: Sym<R, C, E>,
+}
+
+impl<C, E, L, R> Eq<C, E, L, R>
+where
+    L: Value,
+    R: Value,
+    C: SymCtx<L> + SymCtx<R>,
+    E: SymExpr<L> + SymExpr<R>,
+{
+    pub fn new(lhs: Sym<L, C, E>, rhs: Sym<R, C, E>) -> Self {
+        Eq { lhs, rhs }
+    }
+}
+
 impl<C, E, L, R> SymValue<C> for Eq<C, E, L, R>
 where
     L: Value,
@@ -144,11 +168,6 @@ where
     }
 }
 
-// Then implement a trait to use the Op struct
-pub trait SymEq<C, E, R> {
-    fn eq(self, rhs: R) -> Sym<bool, C, E>;
-}
-
 impl<C, E, LHS, RHS> SymEq<C, E, Sym<RHS, C, E>> for Sym<LHS, C, E>
 where
     C: SymCtx<LHS> + SymCtx<RHS> + SymCtx<bool>,
@@ -160,21 +179,6 @@ where
 {
     fn eq(self, rhs: Sym<RHS, C, E>) -> Sym<bool, C, E> {
         Sym::<bool, C, E>::Expr(E::lift(Eq::new(self, rhs)))
-    }
-}
-
-impl<C, E, LHS> Sym<LHS, C, E>
-where
-    LHS: Value,
-    C: SymCtx<LHS> + SymCtx<bool>,
-    E: SymExpr<LHS> + SymExpr<bool>,
-{
-    #[inline(always)]
-    pub fn eq<RHS>(&self, rhs: RHS) -> Sym<bool, C, E>
-    where
-        for<'a> &'a Self: SymEq<C, E, RHS>,
-    {
-        SymEq::eq(self, rhs)
     }
 }
 ```
