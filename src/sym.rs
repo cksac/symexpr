@@ -87,6 +87,17 @@ where
     }
 }
 
+impl<T, C, E> From<&str> for Sym<T, C, E>
+where
+    T: Value,
+    C: SymCtx<T>,
+    E: SymExpr<T>,
+{
+    fn from(name: &str) -> Self {
+        Sym::<T, C, E>::symbol(name)
+    }
+}
+
 impl<T, C, E> Sym<T, C, E>
 where
     T: Value,
