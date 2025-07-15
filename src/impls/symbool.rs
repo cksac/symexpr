@@ -1,3 +1,5 @@
+use std::process::Output;
+
 use crate::{impl_sym_val, impl_val_bin_ops};
 
 impl_sym_val!(bool, SymBool);

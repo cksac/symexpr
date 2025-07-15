@@ -16,6 +16,11 @@ where
         let symbol = Symbol::new(symbol);
         self.insert(symbol, value);
     }
+
+    fn del_symbol(&mut self, symbol: impl AsRef<str>) {
+        let symbol = Symbol::new(symbol);
+        self.remove(&symbol);
+    }
 }
 
 #[derive(Debug, Default)]
@@ -48,6 +53,27 @@ macro_rules! context_for {
 
             fn set_symbol(&mut self, symbol: impl AsRef<str>, value: $T) {
                 self.$F.set_symbol(symbol, value);
+            }
+
+            fn del_symbol(&mut self, symbol: impl AsRef<str>) {
+                self.$F.del_symbol(symbol);
+            }
+        }
+
+        impl SymCtx<Option<$T>> for Context {
+            fn get_symbol(&self, symbol: Symbol) -> Result<Option<$T>> {
+                Ok(self.$F.get_symbol(symbol).ok())
+            }
+
+            fn set_symbol(&mut self, symbol: impl AsRef<str>, value: Option<$T>) {
+                match value {
+                    Some(v) => self.$F.set_symbol(symbol, v),
+                    None => self.$F.del_symbol(symbol),
+                }
+            }
+
+            fn del_symbol(&mut self, symbol: impl AsRef<str>) {
+                self.$F.del_symbol(symbol);
             }
         }
         )+

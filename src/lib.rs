@@ -11,13 +11,13 @@ pub use context::*;
 
 pub mod ops;
 
-pub mod symfn;
+mod symfn;
 pub use symfn::*;
-
-mod macros;
 
 mod impls;
 pub use impls::*;
+
+mod macros;
 
 #[cfg(test)]
 mod tests {
@@ -56,5 +56,9 @@ mod tests {
         let w = c + z + 2 + k + 3;
         let result = w.eval(&ctx).unwrap();
         assert_eq!(result, 16);
+
+        let v = w.checked_add(12);
+        let r = v.eval(&ctx).unwrap();
+        assert_eq!(r, Some(28));
     }
 }

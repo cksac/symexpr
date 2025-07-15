@@ -12,6 +12,7 @@ pub trait SymValue<C>: Debug {
 pub trait SymCtx<T>: Debug + 'static {
     fn get_symbol(&self, symbol: Symbol) -> Result<T>;
     fn set_symbol(&mut self, symbol: impl AsRef<str>, value: T);
+    fn del_symbol(&mut self, symbol: impl AsRef<str>);
 }
 
 pub trait SymExpr<T>: Debug + 'static {
@@ -117,3 +118,5 @@ where
         }
     }
 }
+
+impl<T> Value for Option<T> where T: Value {}
