@@ -686,6 +686,8 @@ macro_rules! integer_common_impl {
                 )))
             }
 
+            /// # Safety
+            /// This results in undefined behavior when self + rhs > MAX or self + rhs < MIN, i.e. when checked_add would return None.
             pub unsafe fn unchecked_add(&self, rhs: impl Into<$S<C, E>>) -> $S<C, E> {
                 #[inline(always)]
                 fn _unchecked_add(x: ($T, $T)) -> $T {
@@ -718,6 +720,8 @@ macro_rules! integer_common_impl {
                 )))
             }
 
+            /// # Safety
+            /// This results in undefined behavior when self - rhs > MAX or self - rhs < MIN, i.e. when checked_sub would return None.
             pub unsafe fn unchecked_sub(&self, rhs: impl Into<$S<C, E>>) -> $S<C, E> {
                 #[inline(always)]
                 fn _unchecked_sub(x: ($T, $T)) -> $T {
@@ -750,6 +754,8 @@ macro_rules! integer_common_impl {
                 )))
             }
 
+            /// # Safety
+            /// This results in undefined behavior when self * rhs > MAX or self * rhs < MIN, i.e. when checked_mul would return None.
             pub unsafe fn unchecked_mul(&self, rhs: impl Into<$S<C, E>>) -> $S<C, E> {
                 #[inline(always)]
                 fn _unchecked_mul(x: ($T, $T)) -> $T {
