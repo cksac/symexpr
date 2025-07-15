@@ -1702,8 +1702,6 @@ macro_rules! float_impl {
                 )))
             }
 
-            // TODO: sin_cost, not support tuple value output now
-
             pub fn exp_m1(&self) -> $S<C, E> {
                 $S::Expr(E::lift($crate::SymFn::new(
                     "exp_m1",
@@ -1765,6 +1763,213 @@ macro_rules! float_impl {
                     "atanh",
                     (self.clone(),),
                     $T::atanh,
+                )))
+            }
+
+            pub fn is_nan(&self) -> $crate::SymBool<C, E>
+            where
+                C: $crate::SymCtx<bool>,
+                E: $crate::SymExpr<bool>,
+            {
+                $crate::SymBool::Expr(E::lift($crate::SymFn::new(
+                    "is_nan",
+                    (self.clone(),),
+                    $T::is_nan,
+                )))
+            }
+
+            pub fn is_infinite(&self) -> $crate::SymBool<C, E>
+            where
+                C: $crate::SymCtx<bool>,
+                E: $crate::SymExpr<bool>,
+            {
+                $crate::SymBool::Expr(E::lift($crate::SymFn::new(
+                    "is_infinite",
+                    (self.clone(),),
+                    $T::is_infinite,
+                )))
+            }
+
+            pub fn is_finite(&self) -> $crate::SymBool<C, E>
+            where
+                C: $crate::SymCtx<bool>,
+                E: $crate::SymExpr<bool>,
+            {
+                $crate::SymBool::Expr(E::lift($crate::SymFn::new(
+                    "is_finite",
+                    (self.clone(),),
+                    $T::is_finite,
+                )))
+            }
+
+            pub fn is_subnormal(&self) -> $crate::SymBool<C, E>
+            where
+                C: $crate::SymCtx<bool>,
+                E: $crate::SymExpr<bool>,
+            {
+                $crate::SymBool::Expr(E::lift($crate::SymFn::new(
+                    "is_subnormal",
+                    (self.clone(),),
+                    $T::is_subnormal,
+                )))
+            }
+
+            pub fn is_normal(&self) -> $crate::SymBool<C, E>
+            where
+                C: $crate::SymCtx<bool>,
+                E: $crate::SymExpr<bool>,
+            {
+                $crate::SymBool::Expr(E::lift($crate::SymFn::new(
+                    "is_normal",
+                    (self.clone(),),
+                    $T::is_normal,
+                )))
+            }
+
+            pub fn is_sign_positive(&self) -> $crate::SymBool<C, E>
+            where
+                C: $crate::SymCtx<bool>,
+                E: $crate::SymExpr<bool>,
+            {
+                $crate::SymBool::Expr(E::lift($crate::SymFn::new(
+                    "is_sign_positive",
+                    (self.clone(),),
+                    $T::is_sign_positive,
+                )))
+            }
+
+            pub fn is_sign_negative(&self) -> $crate::SymBool<C, E>
+            where
+                C: $crate::SymCtx<bool>,
+                E: $crate::SymExpr<bool>,
+            {
+                $crate::SymBool::Expr(E::lift($crate::SymFn::new(
+                    "is_sign_negative",
+                    (self.clone(),),
+                    $T::is_sign_negative,
+                )))
+            }
+
+            pub fn next_up(&self) -> $S<C, E> {
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "next_up",
+                    (self.clone(),),
+                    $T::next_up,
+                )))
+            }
+
+            pub fn next_down(&self) -> $S<C, E> {
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "next_down",
+                    (self.clone(),),
+                    $T::next_down,
+                )))
+            }
+
+            pub fn recip(&self) -> $S<C, E> {
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "recip",
+                    (self.clone(),),
+                    $T::recip,
+                )))
+            }
+
+            pub fn to_degrees(&self) -> $S<C, E> {
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "to_degrees",
+                    (self.clone(),),
+                    $T::to_degrees,
+                )))
+            }
+
+            pub fn to_radians(&self) -> $S<C, E> {
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "to_radians",
+                    (self.clone(),),
+                    $T::to_radians,
+                )))
+            }
+
+            pub fn max(&self, other: impl Into<$S<C, E>>) -> $S<C, E> {
+                #[inline(always)]
+                fn _max(x: ($T, $T)) -> $T {
+                    let (self_val, other_val) = x;
+                    self_val.max(other_val)
+                }
+                let other = other.into();
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "max",
+                    (self.clone(), other),
+                    _max,
+                )))
+            }
+
+            pub fn min(&self, other: impl Into<$S<C, E>>) -> $S<C, E> {
+                #[inline(always)]
+                fn _min(x: ($T, $T)) -> $T {
+                    let (self_val, other_val) = x;
+                    self_val.min(other_val)
+                }
+                let other = other.into();
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "min",
+                    (self.clone(), other),
+                    _min,
+                )))
+            }
+
+            pub fn midpoint(&self, other: impl Into<$S<C, E>>) -> $S<C, E> {
+                #[inline(always)]
+                fn _midpoint(x: ($T, $T)) -> $T {
+                    let (self_val, other_val) = x;
+                    self_val.midpoint(other_val)
+                }
+                let other = other.into();
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "midpoint",
+                    (self.clone(), other),
+                    _midpoint,
+                )))
+            }
+
+            pub fn clamp(&self, min: impl Into<$S<C, E>>, max: impl Into<$S<C, E>>) -> $S<C, E> {
+                #[inline(always)]
+                fn _clamp(x: ($T, $T, $T)) -> $T {
+                    let (self_val, min_val, max_val) = x;
+                    self_val.clamp(min_val, max_val)
+                }
+                let min = min.into();
+                let max = max.into();
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "clamp",
+                    (self.clone(), min, max),
+                    _clamp,
+                )))
+            }
+
+            pub fn abs(&self) -> $S<C, E> {
+                $S::Expr(E::lift($crate::SymFn::new("abs", (self.clone(),), $T::abs)))
+            }
+
+            pub fn signum(&self) -> $S<C, E> {
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "signum",
+                    (self.clone(),),
+                    $T::signum,
+                )))
+            }
+
+            pub fn copysign(&self, other: impl Into<$S<C, E>>) -> $S<C, E> {
+                #[inline(always)]
+                fn _copysign(x: ($T, $T)) -> $T {
+                    let (self_val, other_val) = x;
+                    self_val.copysign(other_val)
+                }
+                let other = other.into();
+                $S::Expr(E::lift($crate::SymFn::new(
+                    "copysign",
+                    (self.clone(), other),
+                    _copysign,
                 )))
             }
         }
