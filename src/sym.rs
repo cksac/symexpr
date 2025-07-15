@@ -86,12 +86,9 @@ where
     C: SymCtx<T>,
     E: SymExpr<T>,
 {
+    #[inline(always)]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Sym::Symbol(s) => write!(f, "{}", s),
-            Sym::Const(v) => v.display(f),
-            Sym::Expr(e) => e.display(f),
-        }
+        self.display(f)
     }
 }
 
@@ -154,8 +151,8 @@ where
 
     fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Sym::Symbol(s) => write!(f, "{}", s),
-            Sym::Const(v) => write!(f, "{:?}", v),
+            Sym::Symbol(s) => write!(f, "{s}"),
+            Sym::Const(v) => v.display(f),
             Sym::Expr(e) => e.display(f),
         }
     }
