@@ -45,6 +45,14 @@ where
         let rhs = self.rhs.eval(ctx)?;
         Ok(lhs || rhs)
     }
+
+    fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("(")?;
+        self.lhs.display(f)?;
+        f.write_str(" || ")?;
+        self.rhs.display(f)?;
+        f.write_str(")")
+    }
 }
 
 impl<C, E> SymOr<C, E, Sym<bool, C, E>> for Sym<bool, C, E>

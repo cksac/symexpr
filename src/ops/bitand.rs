@@ -40,6 +40,14 @@ where
         let rhs = self.rhs.eval(ctx)?;
         Ok(lhs & rhs)
     }
+
+    fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("(")?;
+        self.lhs.display(f)?;
+        f.write_str(" & ")?;
+        self.rhs.display(f)?;
+        f.write_str(")")
+    }
 }
 
 impl<C, E, LHS, RHS, OUT> std::ops::BitAnd<Sym<RHS, C, E>> for Sym<LHS, C, E>

@@ -25,6 +25,13 @@ where
         let input = self.input.0.eval(ctx)?;
         Ok((self.func)(input))
     }
+    
+    fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("(")?;
+        self.input.0.display(f)?;
+        f.write_str(")")?;
+        Ok(())
+    }
 }
 
 impl<C, S1, S2, I1, I2, O> SymValue<C> for SymFn<(S1, S2), (I1, I2), O>
@@ -43,6 +50,15 @@ where
         let i2 = self.input.1.eval(ctx)?;
         let input = (i1, i2);
         Ok((self.func)(input))
+    }
+
+    fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("(")?;
+        self.input.0.display(f)?;
+        f.write_str(", ")?;
+        self.input.1.display(f)?;
+        f.write_str(")")?;
+        Ok(())
     }
 }
 
@@ -65,5 +81,16 @@ where
         let i3 = self.input.2.eval(ctx)?;
         let input = (i1, i2, i3);
         Ok((self.func)(input))
+    }
+
+    fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("(")?;
+        self.input.0.display(f)?;
+        f.write_str(", ")?;
+        self.input.1.display(f)?;
+        f.write_str(", ")?;
+        self.input.2.display(f)?;
+        f.write_str(")")?;
+        Ok(())
     }
 }

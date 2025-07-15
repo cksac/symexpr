@@ -1,12 +1,15 @@
-use std::{fmt::Debug, ops::Deref, rc::Rc, sync::Arc};
+use std::{fmt::{Debug, Display}, ops::Deref, rc::Rc, sync::Arc};
 
 use crate::{Context, Result, Symbol};
 
-pub trait Value: Debug + Clone + 'static {}
+pub trait Value: Debug + Clone + 'static {
+    fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result;
+}
 
 pub trait SymValue<C>: Debug {
     type Value: Value;
     fn eval(&self, ctx: &C) -> Result<Self::Value>;
+    fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result;
 }
 
 pub trait SymCtx<T>: Debug + 'static {
@@ -72,6 +75,21 @@ where
     Expr(E::Expr<C>),
 }
 
+impl<T, C, E> Display for Sym<T, C, E>
+where
+    T: Value,
+    C: SymCtx<T>,
+    E: SymExpr<T>,
+{
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Sym::Symbol(s) => write!(f, "{}", s),
+            Sym::Const(v) => v.display(f),
+            Sym::Expr(e) => e.display(f),
+        }
+    }
+}
+
 impl<T, C, E> Clone for Sym<T, C, E>
 where
     T: Value,
@@ -128,6 +146,21 @@ where
             Sym::Expr(e) => e.eval(ctx),
         }
     }
+    
+    fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Sym::Symbol(s) => write!(f, "{}", s),
+            Sym::Const(v) => write!(f, "{:?}", v),
+            Sym::Expr(e) => e.display(f),
+        }
+    }    
 }
 
-impl<T> Value for Option<T> where T: Value {}
+impl<T> Value for Option<T> where T: Value {
+    fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Some(value) => value.display(f),
+            None => write!(f, "None"),
+        }
+    }
+}

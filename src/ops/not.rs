@@ -35,6 +35,11 @@ where
         let x = self.x.eval(ctx)?;
         Ok(!x)
     }
+
+    fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str("!")?;
+        self.x.display(f)
+    }
 }
 
 impl<C, E, L, O> std::ops::Not for Sym<L, C, E>

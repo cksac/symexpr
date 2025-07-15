@@ -1,12 +1,20 @@
 #[macro_export]
 macro_rules! impl_sym_val {
     ($Val:ident, $Alias:ident) => {
-        impl $crate::Value for $Val {}
+        impl $crate::Value for $Val {
+            fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                write!(f, "{}", self)
+            }
+        }
 
         impl<C> $crate::SymValue<C> for $Val {
             type Value = $Val;
             fn eval(&self, _ctx: &C) -> $crate::Result<Self::Value> {
                 Ok(*self)
+            }
+
+            fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                write!(f, "{}", self)
             }
         }
 
