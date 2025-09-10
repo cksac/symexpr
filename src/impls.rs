@@ -13,3 +13,5 @@ pub use symchar::SymChar;
 
 mod symbool;
 pub use symbool::SymBool;
+
+mod symopt;

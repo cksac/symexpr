@@ -157,15 +157,3 @@ where
         }
     }
 }
-
-impl<T> Value for Option<T>
-where
-    T: Value,
-{
-    fn display(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Some(value) => value.display(f),
-            None => write!(f, "None"),
-        }
-    }
-}
