@@ -18,7 +18,7 @@ where
     C: SymCtx<Option<T>> + SymCtx<T> + SymCtx<bool>,
     E: SymExpr<Option<T>> + SymExpr<T> + SymExpr<bool>,
 {
-    fn is_some(&self) -> Sym<bool, C, E> {
+    pub fn is_some(&self) -> Sym<bool, C, E> {
         fn _is_some<X>(x: Option<X>) -> bool {
             x.is_some()
         }
@@ -30,7 +30,7 @@ where
         )))
     }
 
-    fn is_none(&self) -> Sym<bool, C, E> {
+    pub fn is_none(&self) -> Sym<bool, C, E> {
         fn _is_none<X>(x: Option<X>) -> bool {
             x.is_none()
         }
@@ -41,7 +41,7 @@ where
         )))
     }
 
-    fn unwrap(&self) -> Sym<T, C, E> {
+    pub fn unwrap(&self) -> Sym<T, C, E> {
         fn _unwrap<X>(x: Option<X>) -> X {
             x.unwrap()
         }
