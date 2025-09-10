@@ -1,6 +1,5 @@
 use crate::{Sym, SymCtx, SymExpr, SymFn, Value};
 
-
 impl<T> Value for Option<T>
 where
     T: Value,
@@ -12,7 +11,6 @@ where
         }
     }
 }
-
 
 impl<T, C, E> Sym<Option<T>, C, E>
 where
@@ -47,11 +45,6 @@ where
         fn _unwrap<X>(x: Option<X>) -> X {
             x.unwrap()
         }
-        Sym::Expr(E::lift(SymFn::new(
-            "unwrap",
-            (self.clone(),),
-            _unwrap::<T>,
-        )))
+        Sym::Expr(E::lift(SymFn::new("unwrap", (self.clone(),), _unwrap::<T>)))
     }
 }
-
